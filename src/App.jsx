@@ -6,8 +6,8 @@ import { fetchUsers } from "./features/user/userSlice";
 import { ordered, restocked } from "./features/cake/cakeSlice";
 import TodoList from "./features/todos/TodoList";
 import { Routes, Route } from "react-router-dom";
-import { Heading, VStack } from "@chakra-ui/react";
-
+import { Heading, VStack, IconButton } from "@chakra-ui/react";
+import { FaSun, FaMoon } from "react-icons/fa";
 function App() {
   // const user = useSelector((state) => state.user)
   // const numOfCakes = useSelector((state) => state.cake.numOfCakes)
@@ -18,32 +18,20 @@ function App() {
   // }, [])
 
   return (
-    <VStack>
-      <Heading>My Todo App</Heading>
+    <VStack p={4}>
+      <IconButton
+        borderRadius='3px'
+        size="lg"
+        alignSelf="flex-end"
+        icon = {colorMode === 'light' ? <FaMoon /> : <FaSun />}
+        ariaLabel= 'Switch DarkMode'
+      />
+      <Heading mg='8' fontWeight="extrabold" size="2xl">My Todo App</Heading>
 
       <Routes>
         <Route path="*" element={<TodoList />} />
       </Routes>
     </VStack>
-    
-      {/* number of cakes {numOfCakes} */}
-      {/* <button onClick={() => dispatch(ordered())}>order cake</button>
-      <button onClick={() => dispatch(restocked(5))}>restock cake</button>
-      <button onClick={() => dispatch(fetchUsers())}>get users</button>
-      <div>
-        {user.loading && <div>Users are loading</div>}
-        {!user.loading && user.error ? <div>error {user.error}</div> :null }
-        {!user.loading && user.users.length ? (
-            user.users.map(user => (
-              <li key={user.id}>{user.name}</li>
-            )
-
-          )
-        ) 
-        : null
-      }
-
-      </div> */}
   );
 }
 

@@ -119,3 +119,7 @@ button:focus-visible {
   max-height: 30%;
   overflow: auto;
 }
+
+.done{
+  text-decoration: overline;
+}
