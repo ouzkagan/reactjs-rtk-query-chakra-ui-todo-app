@@ -1,8 +1,8 @@
-import React,{useState} from 'react'
+import { Button, HStack, Input } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import {
-  useAddTodoMutation,
+  useAddTodoMutation
 } from "../api/apiSlice";
-import { Button, HStack, Input, useToast } from '@chakra-ui/react';
 
 export default function AddTodo() {
 

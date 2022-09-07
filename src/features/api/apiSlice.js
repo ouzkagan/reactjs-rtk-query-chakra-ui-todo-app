@@ -36,7 +36,7 @@ export const apiSlice = createApi({
             // Updating draft data with new todo item
             draft.unshift({
               ...todo,
-              id: '9999xx'
+              id: 'temp' + Math.random()
             })
           })
         )

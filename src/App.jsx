@@ -3,7 +3,7 @@
 // import { useSelector, useDispatch } from "react-redux";
 // import { fetchUsers } from "./features/user/userSlice";
 // import { ordered, restocked } from "./features/cake/cakeSlice";
-import { Heading, IconButton, useColorMode, VStack } from "@chakra-ui/react";
+import { IconButton, useColorMode, VStack } from "@chakra-ui/react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -30,7 +30,6 @@ function App() {
         icon = {colorMode === 'light' ? <FaMoon /> : <FaSun />}
         onClick={toggleColorMode}
       />
-      <Heading mg='8' fontWeight="extrabold" size="2xl">My Todo App</Heading>
 
       <Routes>
         <Route path="/" element={<UserLogin />} />
