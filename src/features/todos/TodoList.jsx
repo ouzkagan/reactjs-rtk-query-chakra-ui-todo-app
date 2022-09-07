@@ -1,32 +1,14 @@
 import {
-  useGetTodosQuery,
-  useDeleteTodoMutation,
-  useUpdateTodoMutation,
-} from "../api/apiSlice";
-import React, { useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import TodoDetail from "./TodoDetail";
-import AddTodo from "./AddTodo";
-import {
-  HStack,
-  VStack,
-  Text,
-  IconButton,
-  StackDivider,
-  Spacer,
-  Badge,
-  Checkbox,
-  CheckboxGroup,
-  Center,
-  Flex,
-  Spinner,
-  Skeleton,
-  Stack,
-  Box,
-  Button,
-  SkeletonText,
+  Badge, Center, Checkbox, HStack, IconButton, Skeleton, Spacer, StackDivider, Text, VStack
 } from "@chakra-ui/react";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import {
+  useDeleteTodoMutation, useGetTodosQuery, useUpdateTodoMutation
+} from "../api/apiSlice";
+import AddTodo from "./AddTodo";
+import TodoDetail from "./TodoDetail";
 
 export default function TodoList() {
   const navigate = useNavigate();
@@ -131,6 +113,8 @@ export default function TodoList() {
               <HStack
                 key={todo.id}
                 bg={isDeleting && deletingId == todo.id ? "red.700" : ""}
+                borderRadius="3px"
+                p="1"
               >
                 {/* <Center> */}
 
@@ -194,7 +178,7 @@ export default function TodoList() {
       {content}
       <div>
         <Routes>
-          <Route path="/todos/:id" element={<TodoDetail />} />
+          <Route path="/:id" element={<TodoDetail />} />
           <Route
             element={
               <div>

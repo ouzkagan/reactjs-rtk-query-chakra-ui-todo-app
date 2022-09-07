@@ -3,11 +3,12 @@
 // import { useSelector, useDispatch } from "react-redux";
 // import { fetchUsers } from "./features/user/userSlice";
 // import { ordered, restocked } from "./features/cake/cakeSlice";
+import { Heading, IconButton, useColorMode, VStack } from "@chakra-ui/react";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import TodoList from "./features/todos/TodoList";
-import { Routes, Route } from "react-router-dom";
-import { Heading, VStack, IconButton,useColorMode } from "@chakra-ui/react";
-import { FaSun, FaMoon } from "react-icons/fa";
+import UserLogin from "./features/user/UserLogin";
 
 function App() {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -32,7 +33,8 @@ function App() {
       <Heading mg='8' fontWeight="extrabold" size="2xl">My Todo App</Heading>
 
       <Routes>
-        <Route path="*" element={<TodoList />} />
+        <Route path="/" element={<UserLogin />} />
+        <Route path="todos/*" element={<TodoList />} />
       </Routes>
     </VStack>
   );

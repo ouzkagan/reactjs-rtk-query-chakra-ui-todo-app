@@ -2,25 +2,14 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
-  useGetTodoQuery,
   useGetTodosQuery,
-  useUpdateTodoMutation,
+  useUpdateTodoMutation
 } from "../api/apiSlice";
 
 import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Input,
-  Center,
-  Checkbox,
-  HStack,
-  useDisclosure,
+  Button, Checkbox,
+  HStack, Input, Modal, ModalBody,
+  ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure
 } from "@chakra-ui/react";
 
 export default function TodoDetail() {
@@ -110,12 +99,13 @@ export default function TodoDetail() {
               loadingText='Updating'
               mr="4"
               onClick={() =>
-                updateTodo({ ...todo, content: newContent || todo.content })
+                {updateTodo({ ...todo, content: newContent || todo.content })
+                navigate(`/todos`)}
               }
             >
               Update Todo
             </Button>
-            <Button colorScheme="blue" mr={3} onClick={() => navigate(`/`)}>
+            <Button colorScheme="blue" mr={3} onClick={() => navigate(`/todos`)}>
               Close
             </Button>
           </ModalFooter>
