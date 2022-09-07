@@ -83,7 +83,6 @@ export default function userLogin() {
 
   // Watch image upload.
   useEffect(() => {
-    console.log("useeffect worked");
     const subscription = watch((value, { name, type }) => {
       const { file_ } = value;
       if (name != "file_") {
@@ -130,7 +129,7 @@ export default function userLogin() {
         <Box minW={{ base: "90%", md: "468px" }}>
           <form onSubmit={onSubmit}>
             <Heading size="lg" color={textColor}>
-              Profile {'of ' + user?.user?.username}
+              Profile {user?.user?.username && 'of ' + user?.user?.username}
             </Heading>
             <Stack spacing={4} p="1rem">
               <FormControl isInvalid={!!errors.file_} isRequired>

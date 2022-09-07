@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Button,
   Center,
   Checkbox,
@@ -17,11 +18,13 @@ import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
+import { useSelector } from "react-redux";
 import {
   useDeleteTodoMutation,
   useGetTodosQuery,
   useUpdateTodoMutation
 } from "../api/apiSlice";
+
 import AddTodo from "./AddTodo";
 import TodoDetail from "./TodoDetail";
 
@@ -57,6 +60,7 @@ export default function TodoList() {
   //     (data, userId) => data?.filter(post => post.user === userId) ?? emptyArray
   //   )
   // }, [])
+  const { user } = useSelector((state) => state.user);
 
   const {
     data: todos,
@@ -77,7 +81,26 @@ export default function TodoList() {
   };
 
   let content;
-  if (isLoading) {
+  if (!user?.username) {
+    content = (
+      <VStack
+        divider={<StackDivider />}
+        borderColor="gray.100"
+        borderWidth="2px"
+        p="4"
+        borderRadius="lg"
+        w="100%"
+        maxW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
+        minW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
+        alignItems="stretch"
+      >
+        <Box textAlign="center" size="2xl" p="10">
+          You must be logged in to see this content{" "}
+          <Button ml="4" onClick={() => navigate("/profile")}>Login</Button>
+        </Box>
+      </VStack>
+    );
+  } else if (isLoading) {
     content = (
       <VStack
         divider={<StackDivider />}
@@ -195,18 +218,16 @@ export default function TodoList() {
                   />
                 </Center>
                 <Center>
-                  <Text 
-                    as={todo.isCompleted ? "em" : ""}
-                  >
-                  <Text
-                    textAlign="left"
-                    as={todo.isCompleted ? "del" : "samp"}
-                    noOfLines={[1, 2, 3]}
-                    maxWidth="400px"
-                    // fontSize='lg'
-                  >
-                    {todo.content}
-                  </Text>
+                  <Text as={todo.isCompleted ? "em" : ""}>
+                    <Text
+                      textAlign="left"
+                      as={todo.isCompleted ? "del" : "samp"}
+                      noOfLines={[1, 2, 3]}
+                      maxWidth="400px"
+                      // fontSize='lg'
+                    >
+                      {todo.content}
+                    </Text>
                   </Text>
                 </Center>
                 <Spacer />
@@ -237,7 +258,7 @@ export default function TodoList() {
   return (
     <main>
       <Heading mg="8" fontWeight="extrabold" size="2xl">
-        My Todo App
+        Todos
       </Heading>
       <AddTodo />
       <Filters />
@@ -245,7 +266,7 @@ export default function TodoList() {
       {content}
       <div>
         <Routes>
-          <Route path="/:id" element={<TodoDetail />} />
+          <Route path="/todos/:id" element={<TodoDetail />} />
           <Route
             element={
               <div>

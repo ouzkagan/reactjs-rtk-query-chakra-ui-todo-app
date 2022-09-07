@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import {
-  useGetTodosQuery,
-  useUpdateTodoMutation
-} from "../api/apiSlice";
+import { useGetTodosQuery, useUpdateTodoMutation } from "../api/apiSlice";
 
 import {
-  Button, Checkbox,
-  HStack, Input, Modal, ModalBody,
-  ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure
+  Button,
+  Checkbox,
+  HStack,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure
 } from "@chakra-ui/react";
 
 export default function TodoDetail() {
@@ -55,15 +61,15 @@ export default function TodoDetail() {
   if (!!todo) {
     content = (
       <HStack>
-          <Checkbox
-            colorScheme={todo.isCompleted ? "gray" : ""}
-            defaultChecked={todo.isCompleted}
-            id={todo.id}
-            onChange={() =>
-              updateTodo({ ...todo, isCompleted: !todo.isCompleted })
-            }
-          />
-        
+        <Checkbox
+          colorScheme={todo.isCompleted ? "gray" : ""}
+          defaultChecked={todo.isCompleted}
+          id={todo.id}
+          onChange={() =>
+            updateTodo({ ...todo, isCompleted: !todo.isCompleted })
+          }
+        />
+
         <Input
           placeholder="Basic usage"
           type="text"
@@ -94,18 +100,22 @@ export default function TodoDetail() {
 
           <ModalFooter>
             <Button
-              variant='outline'
+              variant="outline"
               isLoading={isUpdating}
-              loadingText='Updating'
+              loadingText="Updating"
               mr="4"
-              onClick={() =>
-                {updateTodo({ ...todo, content: newContent || todo.content })
-                navigate(`/todos`)}
-              }
+              onClick={() => {
+                updateTodo({ ...todo, content: newContent || todo.content });
+                navigate(`/todos`);
+              }}
             >
               Update Todo
             </Button>
-            <Button colorScheme="blue" mr={3} onClick={() => navigate(`/todos`)}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => navigate(`/todos`)}
+            >
               Close
             </Button>
           </ModalFooter>

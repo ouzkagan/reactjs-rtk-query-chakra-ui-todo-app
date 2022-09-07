@@ -3,15 +3,14 @@
 // import { useSelector, useDispatch } from "react-redux";
 // import { fetchUsers } from "./features/user/userSlice";
 // import { ordered, restocked } from "./features/cake/cakeSlice";
-import { IconButton, useColorMode, VStack } from "@chakra-ui/react";
-import { FaMoon, FaSun } from "react-icons/fa";
+import { VStack } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import Header from "./components/Header";
 import TodoList from "./features/todos/TodoList";
 import UserLogin from "./features/user/UserLogin";
 
 function App() {
-  const { colorMode, toggleColorMode } = useColorMode()
 
   // const user = useSelector((state) => state.user)
   // const numOfCakes = useSelector((state) => state.cake.numOfCakes)
@@ -23,17 +22,11 @@ function App() {
 
   return (
     <VStack p={4} minHeight="100%">
-      <IconButton
-        borderRadius='3px'
-        size="lg"
-        alignSelf="flex-end"
-        icon = {colorMode === 'light' ? <FaMoon /> : <FaSun />}
-        onClick={toggleColorMode}
-      />
-
+      
+        <Header />
       <Routes>
-        <Route path="/" element={<UserLogin />} />
-        <Route path="todos/*" element={<TodoList />} />
+        <Route path="*" element={<TodoList />} />
+        <Route path="/profile" element={<UserLogin />} />
       </Routes>
     </VStack>
   );
