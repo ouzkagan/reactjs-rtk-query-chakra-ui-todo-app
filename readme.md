@@ -16,5 +16,6 @@ An app made with react and redux to manage your todo tasks.
 - Optimistic updates and fetching todos with with **rtk-query**
 - **React Hook Form** for forms, **YUP** for validations
 - **Framer** for UI animations
-- 
+- pagination with custom usePagination Hook
+
 

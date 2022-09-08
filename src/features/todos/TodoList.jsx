@@ -30,6 +30,7 @@ import {
 import AddTodo from "./AddTodo";
 import TodoDetail from "./TodoDetail";
 
+import Pagination from "../../components/Pagination";
 const Filters = ({ setFilter }) => {
   return (
     // shorthand using the `Flex` component
@@ -46,12 +47,14 @@ const Filters = ({ setFilter }) => {
     </Flex>
   );
 };
+let PageSize = 10;
 
 export default function TodoList() {
   // filter
   const [filter, setFilter] = useState(0);
   const [filteredContent, setFilteredContent] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [todoCount, setTodoCount] = useState(0)
   // router
   const navigate = useNavigate();
 
@@ -110,6 +113,35 @@ export default function TodoList() {
     setDeletingId(id.id);
     deleteTodo(id);
   };
+
+  // paginated data
+  
+  const paginatedTodos = useMemo(() => {
+    let filterType;
+    if(filter == 0){
+      filterType = (item) => {
+        return true
+      }
+    }
+    if(filter == 1){
+      filterType = (item) => {
+        return item?.isCompleted == true
+      }
+    }
+    if(filter == 2){
+      filterType = (item) => {
+        return item?.isCompleted == false
+
+      }
+    }
+    if (todos === undefined) return []
+    let data = [...todos.filter((item)=> filterType(item))]
+    setTodoCount(data.length)
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return data.slice(firstPageIndex, lastPageIndex);
+  }, [todos,filter, currentPage]);
+
 
   // decide content with filters for more complex approach
   const handleFilters = () => {
@@ -229,23 +261,23 @@ export default function TodoList() {
     //     />
     // </Flex>
   } else if (isSuccess) {
-    let filterType;
-    if(filter == 0){
-      filterType = (item) => {
-        return true
-      }
-    }
-    if(filter == 1){
-      filterType = (item) => {
-        return item?.isCompleted == true
-      }
-    }
-    if(filter == 2){
-      filterType = (item) => {
-        return item?.isCompleted == false
+    // let filterType;
+    // if(filter == 0){
+    //   filterType = (item) => {
+    //     return true
+    //   }
+    // }
+    // if(filter == 1){
+    //   filterType = (item) => {
+    //     return item?.isCompleted == true
+    //   }
+    // }
+    // if(filter == 2){
+    //   filterType = (item) => {
+    //     return item?.isCompleted == false
 
-      }
-    }
+    //   }
+    // }
     content =
       todos.length > 0 ? (
         <VStack
@@ -259,7 +291,7 @@ export default function TodoList() {
           minW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
           alignItems="stretch"
         >
-          {todos.filter((item)=> filterType(item)).map((todo) => {
+          {paginatedTodos.map((todo) => {
             return (
               <HStack
                 key={todo.id}
@@ -328,6 +360,13 @@ export default function TodoList() {
               </HStack>
             );
           })}
+         <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={todoCount}
+            pageSize={PageSize}
+            onPageChange={page => setCurrentPage(page)}
+          />
         </VStack>
       ) : (
         <Badge colorScheme="green" p="4" m="4" borderRadius="lg">
