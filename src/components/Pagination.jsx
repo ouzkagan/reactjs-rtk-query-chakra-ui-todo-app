@@ -1,21 +1,23 @@
-import classnames from 'classnames';
-import React from 'react';
-import { DOTS, usePagination } from '../hooks/usePagination';
-const Pagination = props => {
+import { Box, HStack, IconButton } from "@chakra-ui/react";
+import React from "react";
+import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
+import { DOTS, usePagination } from "../hooks/usePagination";
+
+const Pagination = (props) => {
   const {
     onPageChange,
     totalCount,
     siblingCount = 1,
     currentPage,
     pageSize,
-    className
+    className,
   } = props;
 
   const paginationRange = usePagination({
     currentPage,
     totalCount,
     siblingCount,
-    pageSize
+    pageSize,
   });
 
   // If there are less than 2 times in pagination range we shall not render the component
@@ -33,48 +35,108 @@ const Pagination = props => {
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <ul
-      className={classnames('pagination-container', { [className]: className })}
-    >
-       {/* Left navigation arrow */}
-      <li
-        className={classnames('pagination-item', {
-          disabled: currentPage === 1
-        })}
+    <>
+      <HStack spacing="12px" justifyContent='flex-end'>
+        <Box
         onClick={onPrevious}
-      >
-        <div className="arrow left" />
-      </li>
-      {paginationRange.map((pageNumber,index) => {
-         
-        // If the pageItem is a DOT, render the DOTS unicode character
-        if (pageNumber === DOTS) {
-          return <li className="pagination-item dots" key={index}>&#8230;</li>;
-        }
-		
-        // Render our Page Pills
-        return (
-          <li
-            className={classnames('pagination-item', {
-              selected: pageNumber === currentPage
-            })}
-            onClick={() => onPageChange(pageNumber)}
-            key={pageNumber}
-          >
-            {pageNumber}
-          </li>
-        );
-      })}
-      {/*  Right Navigation arrow */}
-      <li
-        className={classnames('pagination-item', {
-          disabled: currentPage === lastPage
+        
+        >
+          <IconButton
+            aria-label="First Page"
+            icon={<CgChevronLeft />}
+            disabled={currentPage === 1}
+            py="0"
+            px="12px"
+            h="32px"
+            textAlign="center"
+            margin="auto 4px"
+            color="rgba(255,255,255, 0.87)"
+            display="flex"
+            alignItems="center"
+            borderRadius="16px"
+            lineHeight="1.43"
+            fontSize="13px"
+            minWidth="32px"
+            bg="none"
+          />
+        </Box>
+        {paginationRange.map((pageNumber, index) => {
+          // If the pageItem is a DOT, render the DOTS unicode character
+          if (pageNumber === DOTS) {
+            return (
+              // <li className="pagination-item dots" key={index}>
+              //   &#8230;
+              // </li>
+              <Box
+                w="40px"
+                // bg="yellow.200"
+                key={pageNumber + '_' +index}
+              >
+                &#8230;
+              </Box>
+            );
+          }
+
+          // Render our Page Pills
+          return (
+            // <li
+            //   className={classnames("pagination-item", {
+            //     selected: pageNumber === currentPage,
+            //   })}
+            //   onClick={() => onPageChange(pageNumber)}
+            //   key={pageNumber}
+            // >
+            //   {pageNumber}
+            // </li>
+            <Box
+              // w="40px"
+              // bg="pink.100"
+              as="button"
+              onClick={() => onPageChange(pageNumber)}
+              key={pageNumber}
+              py="0"
+              px="12px"
+              h="32px"
+              textAlign="center"
+              margin="auto 4px"
+              color="rgba(255,255,255, 0.87)"
+              display="flex"
+              alignItems="center"
+              borderRadius="16px"
+              lineHeight="1.43"
+              fontSize="13px"
+              minWidth="32px"
+              bg={pageNumber == currentPage && "rgba(255,255,255, 0.08)"}
+            >
+              {pageNumber}
+            </Box>
+          );
         })}
+        <Box 
         onClick={onNext}
-      >
-        <div className="arrow right" />
-      </li>
-    </ul>
+        
+          >
+          <IconButton
+            aria-label="Last Page"
+            icon={<CgChevronRight />}
+            disabled={currentPage === lastPage}
+            py="0"
+            px="12px"
+            h="32px"
+            textAlign="center"
+            margin="auto 4px"
+            color="rgba(255,255,255, 0.87)"
+            display="flex"
+            alignItems="center"
+            borderRadius="16px"
+            lineHeight="1.43"
+            fontSize="13px"
+            minWidth="32px"
+            bg="none"
+          />
+        </Box>
+      </HStack>
+    </>
   );
 };
 

@@ -18,32 +18,39 @@ import React, { useMemo, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
-import { createSelector } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 
+import Pagination from "../../components/Pagination";
 import {
   useDeleteTodoMutation,
   useGetTodosQuery,
   useUpdateTodoMutation
 } from "../api/apiSlice";
-
 import AddTodo from "./AddTodo";
 import TodoDetail from "./TodoDetail";
 
-import Pagination from "../../components/Pagination";
-const Filters = ({ setFilter }) => {
+const Filters = ({ filter, setFilter }) => {
+  const filters = ["All", "Completed", "Incompleted"];
   return (
     // shorthand using the `Flex` component
     <Flex align="center" justify="flex-end" m="6">
-      <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(0)}>
-        All
-      </Button>
-      <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(1)}>
+      {filters.map((item, index) => {
+        return <Button
+          colorScheme={index===filter ? 'cyan' : 'blue'}
+          px="4"
+          m="2"
+          onClick={() => setFilter(index)}
+          key={item}
+        >
+          {item} 
+        </Button>;
+      })}
+      {/* <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(1)}>
         Completed
       </Button>
       <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(2)}>
         Not Completed
-      </Button>
+      </Button> */}
     </Flex>
   );
 };
@@ -52,43 +59,42 @@ let PageSize = 10;
 export default function TodoList() {
   // filter
   const [filter, setFilter] = useState(0);
-  const [filteredContent, setFilteredContent] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [todoCount, setTodoCount] = useState(0)
+  const [todoCount, setTodoCount] = useState(0);
   // router
   const navigate = useNavigate();
 
   // rtk
   const { user } = useSelector((state) => state.user);
 
-  // RTK Query filters
-  const selectCompletedPosts = useMemo(() => {
-    const emptyArray = [];
-    // Return a unique selector instance for this page so that
-    // the filtered results are correctly memoized
-    return createSelector(
-      (inputData) => inputData,
-      (data) =>
-        data?.data?.filter((todo) => todo.isCompleted === true) ?? emptyArray
-    );
-  }, []);
+  // Alternative reselect create selector approach for filtering -- RTK Query filters
+  // const selectCompletedPosts = useMemo(() => {
+  //   const emptyArray = [];
+  //   // Return a unique selector instance for this page so that
+  //   // the filtered results are correctly memoized
+  //   return createSelector(
+  //     (inputData) => inputData,
+  //     (data) =>
+  //       data?.data?.filter((todo) => todo.isCompleted === true) ?? emptyArray
+  //   );
+  // }, []);
 
-  const selectInCompletedPosts = useMemo(() => {
-    const emptyArray = [];
-    // Return a unique selector instance for this page so that
-    // the filtered results are correctly memoized
-    return createSelector(
-      (inputData) => inputData,
-      (data) =>
-        data?.data?.filter((todo) => todo.isCompleted === false) ?? emptyArray
-    );
-  }, []);
+  // const selectInCompletedPosts = useMemo(() => {
+  //   const emptyArray = [];
+  //   // Return a unique selector instance for this page so that
+  //   // the filtered results are correctly memoized
+  //   return createSelector(
+  //     (inputData) => inputData,
+  //     (data) =>
+  //       data?.data?.filter((todo) => todo.isCompleted === false) ?? emptyArray
+  //   );
+  // }, []);
 
   // Queries and Mutations
   const {
     data: todos,
-    completedTodos,
-    inCompletedPosts,
+    // completedTodos,
+    // inCompletedPosts,
     isLoading,
     isSuccess,
     isError,
@@ -99,8 +105,8 @@ export default function TodoList() {
       ...result,
       // Include a field called `filteredData` in the result object,
       // and memoize the calculation
-      completedTodos: selectCompletedPosts(result),
-      inCompletedPosts: selectInCompletedPosts(result),
+      // completedTodos: selectCompletedPosts(result),
+      // inCompletedPosts: selectInCompletedPosts(result),
     }),
   });
 
@@ -115,59 +121,33 @@ export default function TodoList() {
   };
 
   // paginated data
-  
+
   const paginatedTodos = useMemo(() => {
     let filterType;
-    if(filter == 0){
+    if (filter == 0) {
       filterType = (item) => {
-        return true
-      }
+        return true;
+      };
     }
-    if(filter == 1){
+    if (filter == 1) {
       filterType = (item) => {
-        return item?.isCompleted == true
-      }
+        return item?.isCompleted == true;
+      };
     }
-    if(filter == 2){
+    if (filter == 2) {
       filterType = (item) => {
-        return item?.isCompleted == false
-
-      }
+        return item?.isCompleted == false;
+      };
     }
-    if (todos === undefined) return []
-    let data = [...todos.filter((item)=> filterType(item))]
-    setTodoCount(data.length)
+    if (todos === undefined) return [];
+    let data = [...todos.filter((item) => filterType(item))];
+    setTodoCount(data.length);
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     return data.slice(firstPageIndex, lastPageIndex);
-  }, [todos,filter, currentPage]);
+  }, [todos, filter, currentPage]);
 
 
-  // decide content with filters for more complex approach
-  const handleFilters = () => {
-    console.log("content changed", filter);
-    if (filter == 0) {
-      try {
-        setFilteredContent([...todos]);
-      } catch {
-        setFilteredContent([]);
-      }
-    }
-    if (filter == 1) {
-      try {
-        setFilteredContent([...completedTodos] || []);
-      } catch (error) {
-        setFilteredContent([]);
-      }
-    }
-    if (filter == 2) {
-      try {
-        setFilteredContent([...inCompletedPosts] || []);
-      } catch (error) {
-        setFilteredContent([]);
-      }
-    }
-  };
   // useEffect(() => {
   //   handleFilters();
   //   return () => {
@@ -360,12 +340,12 @@ export default function TodoList() {
               </HStack>
             );
           })}
-         <Pagination
+          <Pagination
             className="pagination-bar"
             currentPage={currentPage}
             totalCount={todoCount}
             pageSize={PageSize}
-            onPageChange={page => setCurrentPage(page)}
+            onPageChange={(page) => setCurrentPage(page)}
           />
         </VStack>
       ) : (
@@ -382,7 +362,7 @@ export default function TodoList() {
         Todos
       </Heading>
       <AddTodo />
-      <Filters setFilter={setFilter} />
+      <Filters setFilter={setFilter} filter={filter} />
       {isUpdating ? "updating please wait..." : ""}
       {content}
       <div>
