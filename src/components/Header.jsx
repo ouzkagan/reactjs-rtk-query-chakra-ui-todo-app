@@ -45,6 +45,7 @@ export default function Header() {
       p="4"
       divider={<StackDivider />}
       borderRadius="3px"
+      mb="4"
       {...options}
     >
       <Flex w="100%" alignItems="center" justifyContent="space-between">

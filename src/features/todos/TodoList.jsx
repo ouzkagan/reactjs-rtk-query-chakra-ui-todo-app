@@ -14,11 +14,13 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
+import { createSelector } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
+
 import {
   useDeleteTodoMutation,
   useGetTodosQuery,
@@ -28,17 +30,17 @@ import {
 import AddTodo from "./AddTodo";
 import TodoDetail from "./TodoDetail";
 
-const Filters = () => {
+const Filters = ({ setFilter }) => {
   return (
     // shorthand using the `Flex` component
     <Flex align="center" justify="flex-end" m="6">
-      <Button colorScheme="blue" px="4" m="2">
+      <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(0)}>
         All
       </Button>
-      <Button colorScheme="blue" px="4" m="2">
+      <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(1)}>
         Completed
       </Button>
-      <Button colorScheme="blue" px="4" m="2">
+      <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(2)}>
         Not Completed
       </Button>
     </Flex>
@@ -46,29 +48,58 @@ const Filters = () => {
 };
 
 export default function TodoList() {
+  // filter
+  const [filter, setFilter] = useState(0);
+  const [filteredContent, setFilteredContent] = useState([]);
+
   // router
   const navigate = useNavigate();
-  // rtk query
 
-  // const allPosts = useMemo(() => {
-  //   const emptyArray = []
-  //   // Return a unique selector instance for this page so that
-  //   // the filtered results are correctly memoized
-  //   return createSelector(
-  //     res => res.data,
-  //     (res, userId) => userId,
-  //     (data, userId) => data?.filter(post => post.user === userId) ?? emptyArray
-  //   )
-  // }, [])
+  // rtk
   const { user } = useSelector((state) => state.user);
 
+  // RTK Query filters
+  const selectCompletedPosts = useMemo(() => {
+    const emptyArray = [];
+    // Return a unique selector instance for this page so that
+    // the filtered results are correctly memoized
+    return createSelector(
+      (inputData) => inputData,
+      (data) =>
+        data?.data?.filter((todo) => todo.isCompleted === true) ?? emptyArray
+    );
+  }, []);
+
+  const selectInCompletedPosts = useMemo(() => {
+    const emptyArray = [];
+    // Return a unique selector instance for this page so that
+    // the filtered results are correctly memoized
+    return createSelector(
+      (inputData) => inputData,
+      (data) =>
+        data?.data?.filter((todo) => todo.isCompleted === false) ?? emptyArray
+    );
+  }, []);
+
+  // Queries and Mutations
   const {
     data: todos,
+    completedTodos,
+    inCompletedPosts,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetTodosQuery();
+  } = useGetTodosQuery(undefined, {
+    selectFromResult: (result) => ({
+      // We can optionally include the other metadata fields from the result here
+      ...result,
+      // Include a field called `filteredData` in the result object,
+      // and memoize the calculation
+      completedTodos: selectCompletedPosts(result),
+      inCompletedPosts: selectInCompletedPosts(result),
+    }),
+  });
 
   const [updateTodo, { isLoading: isUpdating }] = useUpdateTodoMutation();
   const [deleteTodo, { isLoading: isDeleting }] = useDeleteTodoMutation();
@@ -79,6 +110,38 @@ export default function TodoList() {
     setDeletingId(id.id);
     deleteTodo(id);
   };
+
+  // decide content with filters for more complex approach
+  const handleFilters = () => {
+    console.log("content changed", filter);
+    if (filter == 0) {
+      try {
+        setFilteredContent([...todos]);
+      } catch {
+        setFilteredContent([]);
+      }
+    }
+    if (filter == 1) {
+      try {
+        setFilteredContent([...completedTodos] || []);
+      } catch (error) {
+        setFilteredContent([]);
+      }
+    }
+    if (filter == 2) {
+      try {
+        setFilteredContent([...inCompletedPosts] || []);
+      } catch (error) {
+        setFilteredContent([]);
+      }
+    }
+  };
+  // useEffect(() => {
+  //   handleFilters();
+  //   return () => {
+  //     handleFilters();
+  //   };
+  // }, [filter, isUpdating, isDeleting]);
 
   let content;
   if (!user?.username) {
@@ -96,7 +159,9 @@ export default function TodoList() {
       >
         <Box textAlign="center" size="2xl" p="10">
           You must be logged in to see this content{" "}
-          <Button ml="4" onClick={() => navigate("/profile")}>Login</Button>
+          <Button ml="4" onClick={() => navigate("/profile")}>
+            Login
+          </Button>
         </Box>
       </VStack>
     );
@@ -164,6 +229,23 @@ export default function TodoList() {
     //     />
     // </Flex>
   } else if (isSuccess) {
+    let filterType;
+    if(filter == 0){
+      filterType = (item) => {
+        return true
+      }
+    }
+    if(filter == 1){
+      filterType = (item) => {
+        return item?.isCompleted == true
+      }
+    }
+    if(filter == 2){
+      filterType = (item) => {
+        return item?.isCompleted == false
+
+      }
+    }
     content =
       todos.length > 0 ? (
         <VStack
@@ -177,7 +259,7 @@ export default function TodoList() {
           minW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
           alignItems="stretch"
         >
-          {todos.map((todo) => {
+          {todos.filter((item)=> filterType(item)).map((todo) => {
             return (
               <HStack
                 key={todo.id}
@@ -261,7 +343,7 @@ export default function TodoList() {
         Todos
       </Heading>
       <AddTodo />
-      <Filters />
+      <Filters setFilter={setFilter} />
       {isUpdating ? "updating please wait..." : ""}
       {content}
       <div>

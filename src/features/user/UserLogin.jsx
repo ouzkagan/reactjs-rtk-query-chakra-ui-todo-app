@@ -155,7 +155,7 @@ export default function userLogin() {
                     width="100%"
                     gap={4}
                   >
-                    <Avatar bg="teal.500" size="2xl" src={preview || user.user?.image} />
+                    <Avatar bg="teal.500" size="2xl" src={preview || user?.user?.image} />
                     <Button leftIcon={<Icon as={FiFile} />}>
                       Upload Avatar
                     </Button>
@@ -200,7 +200,7 @@ export default function userLogin() {
                 // colorScheme="teal"
                 width="full"
               >
-                Login
+                {user.user?.username && !!user.user?.image ? 'Save' : 'Login'}
               </Button>
               {!!user.user?.username &&
                 <Text>
