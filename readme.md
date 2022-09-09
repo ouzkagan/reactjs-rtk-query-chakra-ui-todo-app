@@ -17,5 +17,5 @@ An app made with react and redux to manage your todo tasks.
 - **React Hook Form** for forms, **YUP** for validations
 - **Framer** for UI animations
 - pagination with custom usePagination Hook
-
+- Custom Toast redux middleware to manage toasts from 1 place
 

@@ -55,7 +55,6 @@ export const apiSlice = createApi({
         body: todo
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'Todo', id: arg.id }],
-
       // Optimistic Update. Update todo in the interface before being sure it's updated on the server
       async onQueryStarted({ content, isCompleted, id: todoId }, { dispatch, queryFulfilled }) {
         // `updateQueryData` requires the endpoint name and cache key arguments,
@@ -91,6 +90,15 @@ export const apiSlice = createApi({
 
   })
 })
+
+export const {
+  getTodos,
+  getTodo,
+  addTodo,
+  
+  updateTodo,
+  deleteTodo
+} = apiSlice.endpoints
 
 
 export const {

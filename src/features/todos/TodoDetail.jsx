@@ -106,7 +106,7 @@ export default function TodoDetail() {
               mr="4"
               onClick={() => {
                 updateTodo({ ...todo, content: newContent || todo.content });
-                navigate(`/todos`);
+                navigate(`/`);
               }}
             >
               Update Todo
@@ -114,7 +114,7 @@ export default function TodoDetail() {
             <Button
               colorScheme="blue"
               mr={3}
-              onClick={() => navigate(`/todos`)}
+              onClick={() => navigate(`/`)}
             >
               Close
             </Button>

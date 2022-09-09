@@ -76,7 +76,7 @@ export default function userLogin() {
   //   reader.readAsDataURL(file);
   // }
   const onSubmit = handleSubmit((data) => {
-    console.log("On Submit: ", { ...data, preview });
+    // console.log("On Submit: ", { ...data, preview });
     dispatch(login({username: data.username, image: preview, imageFile: JSON.stringify(data.file_)}));
     navigate('/todos')
   });

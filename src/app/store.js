@@ -1,11 +1,10 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { apiSlice } from "../features/api/apiSlice";
 import cakeReducer from '../features/cake/cakeSlice';
 import userReducer from '../features/user/userSlice';
-import { apiSlice } from "../features/api/apiSlice";
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
-import thunk from 'redux-thunk';
-
+import ToastMiddleware from '../middlewares/ToastMiddleware';
 
 // WHITELIST
 const persistConfig = {
@@ -25,7 +24,7 @@ const rootReducer = combineReducers({
 const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({ serializableCheck: false }).concat(apiSlice.middleware),
+    getDefaultMiddleware({ serializableCheck: false }).concat(apiSlice.middleware).concat(ToastMiddleware),
   devTools: process.env.NODE_ENV !== 'production',
 
 })
