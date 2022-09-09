@@ -35,7 +35,7 @@ export default function Header() {
     
   }: {
     // logged in
-    bg: bg,
+    // bg: bg,
     borderRadius: "3px",
     borderColor: "transparent",
   }

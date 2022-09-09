@@ -44,7 +44,7 @@ export default function AddTodo() {
       placeholder="Enter new todo"
       borderColor='gray.200'
       />
-    <Button type='submit' colorScheme='green' px='8' >Add Todo</Button>
+    <Button type='submit' colorScheme='orange' px='8' >Add Todo</Button>
   </HStack>
   </form>
   )

@@ -103,7 +103,7 @@ export default function userLogin() {
   }, [fileChange]);
 
   // color mode
-  const bg = useColorModeValue("cyan.50", "gray.500");
+  const bg = useColorModeValue("cyan.50", "gray.900");
   const textColor = useColorModeValue("gray.800", "white");
 
   return (
@@ -115,6 +115,7 @@ export default function userLogin() {
       justifyContent="center"
       alignItems="center"
       color={textColor}
+      
     >
       <Stack
         flexDir="column"
@@ -125,10 +126,13 @@ export default function userLogin() {
         boxShadow="lg"
         p={10}
         borderRadius={3}
+        // borderRadius="3px"
+        border="1px"
+        borderColor="whiteAlpha.300"
       >
         <Box minW={{ base: "90%", md: "468px" }}>
           <form onSubmit={onSubmit}>
-            <Heading size="lg" color={textColor}>
+            <Heading size="lg" color={textColor} mb={3}>
               Profile {user?.user?.username && 'of ' + user?.user?.username}
             </Heading>
             <Stack spacing={4} p="1rem">
