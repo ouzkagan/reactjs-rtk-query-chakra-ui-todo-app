@@ -33,6 +33,10 @@ import {
 import AddTodo from "./AddTodo";
 import TodoDetail from "./TodoDetail";
 
+// setNotificationDuration,
+
+import { useAppDispatch } from '../../app/hooks/index';
+
 const Filters = ({ filter, setFilter,isLoading }) => {
   const filters = ["All", "Active", "Completed"];
 
@@ -98,6 +102,9 @@ export default function TodoList() {
   const navigate = useNavigate();
 
   // rtk
+  const dispatch = useAppDispatch()
+  // const position = useNotificationPosition()
+
   const { user } = useSelector((state) => state.user);
 
   // Alternative reselect create selector approach for filtering -- RTK Query filters
@@ -379,9 +386,10 @@ export default function TodoList() {
                     isChecked={todo.isCompleted}
                     id={todo.id}
                     key={todo.id}
-                    onChange={() =>
+                    onChange={() =>{
+                     
                       updateTodo({ ...todo, isCompleted: !todo.isCompleted })
-                    }
+                    }}
                     isDisabled={todo.id.includes("temp")}
                     // size="lg"
                   />

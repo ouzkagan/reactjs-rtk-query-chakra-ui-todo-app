@@ -1,6 +1,10 @@
 import { addTodo, deleteTodo, getTodos, updateTodo } from "../features/api/apiSlice";
 
-const ToastMiddleware = () => (next) => (action) => {
+import { addNotification } from '../features/notification/notificationSlice';
+
+const ToastMiddleware = (store) => (next) => (action) => {
+  // const dispatch = useAppDispatch()
+
   console.log(getTodos.matchFulfilled(action));
   // console.log(useAddTodoMutation());
   if(addTodo.matchPending(action)){
@@ -9,12 +13,30 @@ const ToastMiddleware = () => (next) => (action) => {
   }
   if(getTodos.matchFulfilled(action)){
     console.log('Todos retrieved successfully. ')
+    store.dispatch(
+      addNotification({
+        message: `Todos retrieved successfully!`,
+        type: 'success',
+      })
+    )
   }
   if(updateTodo.matchPending(action)){
     console.log('todo updated optimistically. waiting server response. ')
+    store.dispatch(
+      addNotification({
+        message: `todo updated optimistically. waiting server response.`,
+        type: 'info',
+      })
+    )
   }
   if(updateTodo.matchFulfilled(action)){
     console.log('update todo ended successfully')
+    store.dispatch(
+      addNotification({
+        message: `update todo ended successfully`,
+        type: 'info',
+      })
+    )
   }
   if(deleteTodo.matchPending(action)){
     console.log('deleting todo.')

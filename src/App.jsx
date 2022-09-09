@@ -7,8 +7,10 @@ import { VStack } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
+import { Notifications } from "./features/notification/components/Notifications";
 import TodoList from "./features/todos/TodoList";
 import UserLogin from "./features/user/UserLogin";
+
 
 function App() {
 
@@ -28,6 +30,7 @@ function App() {
         <Route path="*" element={<TodoList />} />
         <Route path="/profile" element={<UserLogin />} />
       </Routes>
+      <Notifications />
     </VStack>
   );
 }
