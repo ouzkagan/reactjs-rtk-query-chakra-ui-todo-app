@@ -15,7 +15,7 @@ An app made with react and redux to manage your todo tasks.
 - Persisting user **image and username** information with **redux-toolkit** and **redux-persist** + _logout_ 
 - Optimistic updates, no unnecessary network requests and fetching todos with with **rtk-query**
 - **React Hook Form** for forms, **YUP** for validations
-- **Framer** for UI animations
+- **Framer-motion** for UI animations and toast notifications
 - pagination with custom usePagination Hook
 - Custom Toast redux middleware to manage toasts from 1 place
 

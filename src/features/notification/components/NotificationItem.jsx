@@ -1,16 +1,16 @@
-import clsx from 'clsx'
-import { motion, useIsPresent } from 'framer-motion'
-import { useTimeoutFn, useUpdateEffect } from 'react-use'
+import { Box, Center, IconButton, Text } from "@chakra-ui/react";
+import { motion, useIsPresent } from "framer-motion";
+import { useTimeoutFn, useUpdateEffect } from "react-use";
 
-import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { FaCheckCircle, FaExclamation, FaInfoCircle } from 'react-icons/fa'
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { FaCheckCircle, FaExclamation, FaInfoCircle } from "react-icons/fa";
 
-import { useAppDispatch } from '../../../app/hooks/index'
+import { useAppDispatch } from "../../../app/hooks/index";
 import {
-  dismissNotification, useNotificationDuration,
+  dismissNotification,
+  useNotificationDuration,
   useNotificationPosition
-} from '../notificationSlice'
-
+} from "../notificationSlice";
 
 /**
  * To handle different positions of the notification, we need to change the
@@ -19,29 +19,26 @@ import {
  * @param position - The position of the Notification
  * @param fromEdge - The length of the position from the edge in pixels
  */
-const getMotionDirectionAndPosition = (
-  position,
-  fromEdge = 24
-) => {
-  const directionPositions = ['top', 'bottom']
-  const factorPositions = ['top-right', 'bottom-right']
+const getMotionDirectionAndPosition = (position, fromEdge = 24) => {
+  const directionPositions = ["top", "bottom"];
+  const factorPositions = ["top-right", "bottom-right"];
 
-  const direction = directionPositions.includes(position) ? 'y' : 'x'
-  let factor = factorPositions.includes(position) ? 1 : -1
+  const direction = directionPositions.includes(position) ? "y" : "x";
+  let factor = factorPositions.includes(position) ? 1 : -1;
 
-  if (position === 'bottom') factor = 1
+  if (position === "bottom") factor = 1;
 
   return {
     [direction]: factor * fromEdge,
-  }
-}
+  };
+};
 
 const motionVariants = {
   initial: (position) => {
     return {
       opacity: 0,
       ...getMotionDirectionAndPosition(position),
-    }
+    };
   },
   animate: {
     opacity: 1,
@@ -61,94 +58,122 @@ const motionVariants = {
         duration: 0.2,
         ease: [0.4, 0, 1, 1],
       },
-    }
+    };
   },
-}
+};
 
-const notificationStyleVariants= {
-  success: 'success',
-  error: 'bg-red-3 border-red-6',
-  info: 'bg-purple-3 border-purple-6',
-  warning: 'bg-yellow-3 border-yellow-6',
-}
+const notificationStyleVariants = {
+  success: "green.300",
+  error: "red.500",
+  info: "yellow.400",
+  warning: "orange.300",
+};
 
 const notificationIcons = {
   success: <FaCheckCircle />,
   error: <FaExclamation />,
   info: <FaInfoCircle />,
   warning: <FaExclamation />,
-}
+};
 
-const closeButtonStyleVariants= {
-  success: 'hover:bg-green-5 active:bg-green-6',
-  error: 'hover:bg-red-5 active:bg-red-6',
-  info: 'hover:bg-purple-5 active:bg-purple-6',
-  warning: 'hover:bg-yellow-5 active:bg-yellow-6',
-}
+// const closeButtonStyleVariants = {
+//   success: "hover:bg-green-5 active:bg-green-6",
+//   error: "hover:bg-red-5 active:bg-red-6",
+//   info: "hover:bg-purple-5 active:bg-purple-6",
+//   warning: "hover:bg-yellow-5 active:bg-yellow-6",
+// };
 
 export const NotificationItem = ({
-  notification: { id, autoHideDuration, message, onClose, type = 'info' },
+  notification: { id, autoHideDuration, message, onClose, type = "info" },
 }) => {
-  const dispatch = useAppDispatch()
-  const duration = useNotificationDuration()
-  const isPresent = useIsPresent()
-  const position = useNotificationPosition()
+  const dispatch = useAppDispatch();
+  const duration = useNotificationDuration();
+  const isPresent = useIsPresent();
+  const position = useNotificationPosition();
 
   // Handle dismiss of a single notification
   const handleDismiss = () => {
     if (isPresent) {
-      dispatch(dismissNotification(id))
+      dispatch(dismissNotification(id));
     }
-  }
+  };
 
   // Call the dismiss function after a certain timeout
   const [, cancel, reset] = useTimeoutFn(
     handleDismiss,
-    autoHideDuration ?? duration
-  )
+    2000 ?? duration
+  );
 
   // Reset or cancel dismiss timeout based on mouse interactions
-  const onMouseEnter = () => cancel()
-  const onMouseLeave = () => reset()
+  const onMouseEnter = () => cancel();
+  const onMouseLeave = () => reset();
 
   // Call `onDismissComplete` when notification unmounts if present
   useUpdateEffect(() => {
     if (!isPresent) {
-      onClose?.()
+      onClose?.();
     }
-  }, [isPresent])
+  }, [isPresent]);
 
+  
   return (
-    <motion.li
-      className={clsx(
-        'notification-item-container',
-        notificationStyleVariants[type]
-      )}
+    <Box
+      as={motion.li}
+      display="flex"
+      paddingTop="0.75rem"
+      paddingBottom="0.75rem"
+      paddingLeft="1rem"
+      paddingRight="1rem"
+      transitionProperty="background-color, border-color, color, fill, stroke"
+      transitionDuration="100ms"
+      fontSize="0.875rem"
+      lineHeight="1.25rem"
+      alignItems="center"
+      width="max-content"
+      borderRadius="0.25rem"
+      borderWidth="1px"
+      pointerEvents="auto"
+      boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)"
       initial="initial"
       animate="animate"
       exit="exit"
       layout="position"
+      // notificationStyleVariants[type]
+      bg={notificationStyleVariants[type]}
       custom={position}
       variants={motionVariants}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="notification-item-icon">
-        {notificationIcons[type]}
-        <span className="notification-text">{message}</span>
-      </div>
-
-      <div className="pl-4 ml-auto">
-        <button
+      <Box display="flex" justifyContent="center" gap="0.5rem">
+        <IconButton
+          padding="0.25rem"
+          borderRadius="0.25rem"
+          transitionDuration="100ms"
           onClick={handleDismiss}
-          className={clsx(
-            'notification-exit-icon',
-            closeButtonStyleVariants[type]
-          )}
-        >
-          <AiOutlineCloseCircle />
-        </button>
-      </div>
-    </motion.li>
-  )
-}
+          icon={notificationIcons[type]}
+          colorScheme="gray"
+          variant="ghost"
+        />
+
+        <Center>
+          <Text fontWeight={500} maxWidth="24rem">
+            {message}
+          </Text>
+        </Center>
+      </Box>
+
+      <Box pl={4} ml="auto">
+        <IconButton
+          padding="0.25rem"
+          borderRadius="0.25rem"
+          transitionDuration="100ms"
+          onClick={handleDismiss}
+          icon={<AiOutlineCloseCircle />}
+          colorScheme="gray"
+          variant="ghost"
+        />
+      </Box>
+    </Box>
+  );
+};

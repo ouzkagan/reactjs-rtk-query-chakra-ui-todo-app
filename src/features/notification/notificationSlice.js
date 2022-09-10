@@ -7,7 +7,7 @@ import { useAppSelector } from '../../app/hooks/index'
 
 const initialState = {
   notifications: [],
-  position: 'top-right',
+  position: 'bottom-right',
   autoHideDuration: 6000,
 }
 
@@ -65,7 +65,7 @@ const selectNotifications = (state) =>
   state?.notifications?.notifications || []
 
 const selectNotificationPosition = (state) =>
-  state?.notifications?.position || []
+  state?.notifications?.position || initialState?.position || []
 
 const selectNotificationDuration = (state) =>
   state?.notifications?.autoHideDuration || []

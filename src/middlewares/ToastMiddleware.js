@@ -1,83 +1,100 @@
-import { addTodo, deleteTodo, getTodos, updateTodo } from "../features/api/apiSlice";
+import {
+  addTodo,
+  deleteTodo,
+  getTodos,
+  updateTodo
+} from "../features/api/apiSlice";
 
-import { addNotification } from '../features/notification/notificationSlice';
+import { addNotification } from "../features/notification/notificationSlice";
+import { login } from "../features/user/userSlice";
 
 const ToastMiddleware = (store) => (next) => (action) => {
-  // const dispatch = useAppDispatch()
+  if (action.type == login.type) {
+    // if user does't exist say registered?
+    store.dispatch(
+      addNotification({
+        message: `Logged in successfully.`,
+        type: "success",
+      })
+    );
+  }
 
-  // console.log(getTodos.matchFulfilled(action));
-  // console.log(useAddTodoMutation());
-  if(addTodo.matchPending(action)){
+  if (addTodo.matchPending(action)) {
     // directly opening toast or dispatching addNotification?
-    console.log('Todo added optimistically. Waiting for server reponse.')
+    console.log("Todo added optimistically. Waiting for server reponse.");
     store.dispatch(
       addNotification({
         message: `Todo added optimistically. Waiting for server reponse.`,
-        type: 'info',
+        type: "info",
       })
-    )
+    );
   }
-  if(addTodo.matchFulfilled(action)){
+  if (addTodo.matchFulfilled(action)) {
     // directly opening toast or dispatching addNotification?
-    console.log('Todo added optimistically. Waiting for server reponse.')
+    console.log("Todo added optimistically. Waiting for server reponse.");
     store.dispatch(
       addNotification({
         message: `Add todo ended successfully.`,
-        type: 'success',
+        type: "success",
       })
-    )
+    );
   }
-  if(getTodos.matchFulfilled(action)){
-    console.log('Todos retrieved successfully. ')
+  if (getTodos.matchFulfilled(action)) {
+    console.log("Todos retrieved successfully. ");
     store.dispatch(
       addNotification({
         message: `Todos retrieved successfully!`,
-        type: 'success',
+        type: "success",
       })
-    )
+    );
   }
-  if(updateTodo.matchPending(action)){
-    console.log('todo updated optimistically. waiting server response. ')
+  if (updateTodo.matchPending(action)) {
+    console.log("todo updated optimistically. waiting server response. ");
     store.dispatch(
       addNotification({
-        message: `todo updated optimistically. waiting server response.`,
-        type: 'info',
+        message: `Todo updated optimistically. Waiting for server response...`,
+        type: "info",
       })
-    )
+    );
   }
-  if(updateTodo.matchFulfilled(action)){
-    console.log('update todo ended successfully')
+  if (updateTodo.matchFulfilled(action)) {
+    console.log("update todo ended successfully");
     store.dispatch(
       addNotification({
-        message: `update todo ended successfully`,
-        type: 'success',
+        message: `Todo updated successfully!`,
+        type: "success",
       })
-    )
+    );
   }
-  if(deleteTodo.matchPending(action)){
+  if (deleteTodo.matchPending(action)) {
     store.dispatch(
       addNotification({
-        message: `deleting todo started`,
-        type: 'info',
+        message: `Deleting todo started.`,
+        type: "info",
       })
-    )
+    );
   }
-  if(deleteTodo.matchFulfilled(action)){
+  if (deleteTodo.matchFulfilled(action)) {
     store.dispatch(
       addNotification({
-        message: `todo deleted successfully`,
-        type: 'success',
+        message: `Todo deleted successfully!`,
+        type: "success",
       })
-    )
+    );
+  }
+  if (getTodos.matchRejected(action)) {
+    console.log(action);
   }
 
-  if(action.type.includes('rejected')){
-    store.dispatch(
-      addNotification({
-        message: `Server is not responding. Try again later`,
-        type: 'warning',
-      })
-    )
+  if (action.type.includes("rejected")) {
+    if (action.error.name == "rejected") {
+      store.dispatch(
+        addNotification({
+          message: `Server is not responding. Try again later.`,
+          type: "warning",
+        })
+      );
+    }
   }
 
   // switch (action.type) {
