@@ -412,12 +412,14 @@ export default function TodoList() {
                   icon={<FaEdit />}
                   borderRadius="3px"
                   onClick={() => navigate(`/todos/${todo.id}`)}
+                  isDisabled={todo.id.includes("temp")}
                 />
                 <IconButton
                   icon={<FaTrash />}
                   borderRadius="3px"
                   isLoading={isDeleting && deletingId == todo.id}
                   onClick={() => deleteTodoSide({ id: todo.id })}
+                  isDisabled={todo.id.includes("temp")}
                 />
                 {/* </Center> */}
               </HStack>
