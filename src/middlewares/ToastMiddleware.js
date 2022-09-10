@@ -5,11 +5,27 @@ import { addNotification } from '../features/notification/notificationSlice';
 const ToastMiddleware = (store) => (next) => (action) => {
   // const dispatch = useAppDispatch()
 
-  console.log(getTodos.matchFulfilled(action));
+  // console.log(getTodos.matchFulfilled(action));
   // console.log(useAddTodoMutation());
   if(addTodo.matchPending(action)){
     // directly opening toast or dispatching addNotification?
     console.log('Todo added optimistically. Waiting for server reponse.')
+    store.dispatch(
+      addNotification({
+        message: `Todo added optimistically. Waiting for server reponse.`,
+        type: 'info',
+      })
+    )
+  }
+  if(addTodo.matchFulfilled(action)){
+    // directly opening toast or dispatching addNotification?
+    console.log('Todo added optimistically. Waiting for server reponse.')
+    store.dispatch(
+      addNotification({
+        message: `Add todo ended successfully.`,
+        type: 'success',
+      })
+    )
   }
   if(getTodos.matchFulfilled(action)){
     console.log('Todos retrieved successfully. ')
@@ -39,10 +55,29 @@ const ToastMiddleware = (store) => (next) => (action) => {
     )
   }
   if(deleteTodo.matchPending(action)){
-    console.log('deleting todo.')
+    store.dispatch(
+      addNotification({
+        message: `deleting todo started`,
+        type: 'info',
+      })
+    )
   }
   if(deleteTodo.matchFulfilled(action)){
-    console.log('todo deleted successfully')
+    store.dispatch(
+      addNotification({
+        message: `todo deleted successfully`,
+        type: 'success',
+      })
+    )
+  }
+
+  if(action.type.includes('rejected')){
+    store.dispatch(
+      addNotification({
+        message: `Server is not responding. Try again later`,
+        type: 'info',
+      })
+    )
   }
 
   // switch (action.type) {
