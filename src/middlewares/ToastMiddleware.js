@@ -13,7 +13,9 @@ const ToastMiddleware = (store) => (next) => (action) => {
     // if user does't exist say registered?
     store.dispatch(
       addNotification({
-        message: `Logged in successfully. Welcome ${store.getState().user?.user?.username}!`,
+        message: `Logged in successfully. Welcome ${
+          store.getState().user?.user?.username
+        }!`,
         type: "success",
       })
     );
@@ -96,10 +98,12 @@ const ToastMiddleware = (store) => (next) => (action) => {
   }
 
   if (action.type.includes("rejected")) {
-    if (action.error.name == "rejected") {
+    if(action.error.message == "rejected"){
       store.dispatch(
         addNotification({
-          message: `Server is not responding. Try again later.`,
+          message: `Server is not responding. ${
+            action.payload && "Error:" + action?.payload?.data
+          } `,
           type: "warning",
         })
       );
