@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, useWatch } from "react-hook-form";
-import { FaLock, FaUserAlt } from "react-icons/fa";
+import { FaUserAlt } from "react-icons/fa";
 import { FiFile } from "react-icons/fi";
 import * as yup from "yup";
 
@@ -26,7 +26,6 @@ import FileUpload from "../../components/FileUpload";
 import { login } from "./userSlice";
 
 const CFaUserAlt = chakra(FaUserAlt);
-const CFaLock = chakra(FaLock);
 
 export default function userLogin() {
   // redux
@@ -42,11 +41,16 @@ export default function userLogin() {
     file_: yup
       .mixed()
       .required("You need to provide a file")
+      // .test('isPhotoExists', '', ()=>{
+      //   return user?.user?.image
+      // })
       .test("filePresence", "Please add avatar", (value) => {
+        if (user?.user?.image) return true
         if (value.length == 0) return false; // attachment is optional
         return true;
       })
       .test("fileSize", "The file is too large", (value) => {
+        if (user?.user?.image) return true
         return value && value?.[0]?.size <= 2000000;
       }),
   });
@@ -61,26 +65,25 @@ export default function userLogin() {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
-  // console.log(); // watch input value by passing the name of it
   // const fileChange = watch("file_")
   const fileChange = useWatch({ name: "file_", control });
-  // const uploader = (file) => {
 
-  //   const objectUrl = URL.createObjectURL(selectedFile)
-
-  //   const reader = new FileReader();
-  //   reader.addEventListener('load', ()=>{
-  //       // localStorage.setItem('recent-image',reader.result)
-  //       console.log(reader.result)
-  //   })
-  //   reader.readAsDataURL(file);
-  // }
   const onSubmit = handleSubmit((data) => {
     // console.log("On Submit: ", { ...data, preview });
-    dispatch(login({username: data.username, image: preview, imageFile: JSON.stringify(data.file_)}));
+    dispatch(login({username: data.username, image: preview || user?.user?.image, imageFile: JSON.stringify(data.file_)}));
     navigate('/todos')
   });
 
+
+  const getBase64 = (file) => {
+    return new Promise((resolve,reject) => {
+       const reader = new FileReader();
+       reader.onload = () => resolve(reader.result);
+       reader.onerror = error => reject(error);
+       reader.readAsDataURL(file);
+    });
+  
+    }
   // Watch image upload.
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -96,8 +99,15 @@ export default function userLogin() {
         setPreview(undefined);
         return;
       }
-      const objectUrl = URL.createObjectURL(file_[0]);
-      setPreview(objectUrl);
+
+      // store base64 in local storage
+      getBase64(file_[0]).then(base64 => {
+        // console.log("file stored",base64);
+        setPreview(base64)
+      });
+
+      // const objectUrl = URL.createObjectURL(file_[0]);
+      // setPreview(objectUrl);
     });
     return () => subscription.unsubscribe();
   }, [fileChange]);

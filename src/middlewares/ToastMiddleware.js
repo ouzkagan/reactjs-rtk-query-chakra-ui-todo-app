@@ -50,7 +50,7 @@ const ToastMiddleware = (store) => (next) => (action) => {
     store.dispatch(
       addNotification({
         message: `update todo ended successfully`,
-        type: 'info',
+        type: 'success',
       })
     )
   }
@@ -75,7 +75,7 @@ const ToastMiddleware = (store) => (next) => (action) => {
     store.dispatch(
       addNotification({
         message: `Server is not responding. Try again later`,
-        type: 'info',
+        type: 'warning',
       })
     )
   }

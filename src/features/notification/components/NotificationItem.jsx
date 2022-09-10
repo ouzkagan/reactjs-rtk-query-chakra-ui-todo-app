@@ -2,7 +2,8 @@ import clsx from 'clsx'
 import { motion, useIsPresent } from 'framer-motion'
 import { useTimeoutFn, useUpdateEffect } from 'react-use'
 
-import { FaCheckCircle, FaExclamation, FaInfoCircle, FaXbox } from 'react-icons/fa'
+import { AiOutlineCloseCircle } from 'react-icons/ai'
+import { FaCheckCircle, FaExclamation, FaInfoCircle } from 'react-icons/fa'
 
 import { useAppDispatch } from '../../../app/hooks/index'
 import {
@@ -65,7 +66,7 @@ const motionVariants = {
 }
 
 const notificationStyleVariants= {
-  success: 'bg-green-3 border-green-6',
+  success: 'success',
   error: 'bg-red-3 border-red-6',
   info: 'bg-purple-3 border-purple-6',
   warning: 'bg-yellow-3 border-yellow-6',
@@ -120,7 +121,7 @@ export const NotificationItem = ({
   return (
     <motion.li
       className={clsx(
-        'flex w-max items-center shadow px-4 py-3 rounded border transition-colors duration-100 min-w-[260px] text-sm pointer-events-auto',
+        'notification-item-container',
         notificationStyleVariants[type]
       )}
       initial="initial"
@@ -132,20 +133,20 @@ export const NotificationItem = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="flex gap-2 items-center">
+      <div className="notification-item-icon">
         {notificationIcons[type]}
-        <span className="max-w-sm font-medium">{message}</span>
+        <span className="notification-text">{message}</span>
       </div>
 
       <div className="pl-4 ml-auto">
         <button
           onClick={handleDismiss}
           className={clsx(
-            'p-1 rounded transition-colors duration-100',
+            'notification-exit-icon',
             closeButtonStyleVariants[type]
           )}
         >
-          <FaXbox />
+          <AiOutlineCloseCircle />
         </button>
       </div>
     </motion.li>

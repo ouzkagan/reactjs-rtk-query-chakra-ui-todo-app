@@ -82,7 +82,6 @@ button:focus-visible {
   transition: opacity 500ms; */
   /* visibility: hidden; */
   /* opacity: 0; */
-
 }
 .overlay:target {
   visibility: visible;
@@ -116,14 +115,14 @@ button:focus-visible {
   color: #333;
 }
 .popup .close:hover {
-  color: #06D85F;
+  color: #06d85f;
 }
 .popup .content {
   max-height: 30%;
   overflow: auto;
 }
 
-.done{
+.done {
   text-decoration: overline;
 }
 /* pagination css */
@@ -137,7 +136,7 @@ button:focus-visible {
   height: 32px;
   text-align: center;
   margin: auto 4px;
-  color: rgba(255,255,255, 0.87);
+  color: rgba(255, 255, 255, 0.87);
   display: flex;
   box-sizing: border-box;
   align-items: center;
@@ -152,20 +151,20 @@ button:focus-visible {
   cursor: default;
 }
 .pagination-container .pagination-item:hover {
-  background-color: rgba(255,255,255, 0.04);
+  background-color: rgba(255, 255, 255, 0.04);
   cursor: pointer;
 }
 .pagination-container .pagination-item.selected {
-  background-color: rgba(255,255,255, 0.08);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 .pagination-container .pagination-item .arrow::before {
   position: relative;
-  content: '';
+  content: "";
   display: inline-block;
   width: 0.4em;
   height: 0.4em;
-  border-right: 0.12em solid rgba(255,255,255, 0.87);
-  border-top: 0.12em solid rgba(255,255,255, 0.87);
+  border-right: 0.12em solid rgba(255, 255, 255, 0.87);
+  border-top: 0.12em solid rgba(255, 255, 255, 0.87);
 }
 .pagination-container .pagination-item .arrow.left {
   transform: rotate(-135deg) translate(-50%);
@@ -177,10 +176,77 @@ button:focus-visible {
   pointer-events: none;
 }
 .pagination-container .pagination-item.disabled .arrow::before {
-  border-right: 0.12em solid rgba(255,255,255, 0.43);
-  border-top: 0.12em solid rgba(255,255,255, 0.43);
+  border-right: 0.12em solid rgba(255, 255, 255, 0.43);
+  border-top: 0.12em solid rgba(255, 255, 255, 0.43);
 }
 .pagination-container .pagination-item.disabled:hover {
   background-color: transparent;
   cursor: default;
+}
+
+.notification-list {
+  display: flex;
+  position: fixed;
+  z-index: 50;
+  margin: 1rem;
+  flex-direction: column;
+  pointer-events: none;
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .notification-list {
+    margin: 2rem;
+  }
+}
+
+.notification-item-container {
+  display: flex;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 100ms;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  align-items: center;
+  width: max-content;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  pointer-events: auto;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.notification-item-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
+.notification-text {
+  font-weight: 500; 
+max-width: 24rem; 
+}
+
+.notification-exit {
+  padding-left: 1rem; 
+
+}
+
+.notification-exit-icon {
+  padding: 0.25rem; 
+transition-property: background-color, border-color, color, fill, stroke; 
+transition-duration: 100ms; 
+border-radius: 0.25rem; 
+}
+.bottom-right{ 
+  right: 0; 
+bottom: 0; 
+align-items: flex-end; 
+}
+.success{
+  background-color: rgb(134 239 172);
+  border-color: rgb(22 163 74);
 }

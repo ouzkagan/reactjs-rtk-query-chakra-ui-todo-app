@@ -1,4 +1,4 @@
-import { Box, HStack, IconButton } from "@chakra-ui/react";
+import { Box, HStack, IconButton, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
 import { DOTS, usePagination } from "../hooks/usePagination";
@@ -34,6 +34,11 @@ const Pagination = (props) => {
   };
 
   let lastPage = paginationRange[paginationRange.length - 1];
+
+  // chakra theme colors
+  const bg = useColorModeValue("cyan.50", "gray.600");
+  const iconColors = useColorModeValue("black","rgba(255,255,255, 0.87)")
+  const chosen =  useColorModeValue("#E2E8F0","rgba(255,255,255, 0.08)")
   return (
     <>
       <HStack spacing="12px" justifyContent='flex-end'>
@@ -50,7 +55,7 @@ const Pagination = (props) => {
             h="32px"
             textAlign="center"
             margin="auto 4px"
-            color="rgba(255,255,255, 0.87)"
+            color={iconColors}
             display="flex"
             alignItems="center"
             borderRadius="16px"
@@ -99,14 +104,17 @@ const Pagination = (props) => {
               h="32px"
               textAlign="center"
               margin="auto 4px"
-              color="rgba(255,255,255, 0.87)"
+              // color="rgba(255,255,255, 0.87)"
+              color={iconColors}
               display="flex"
               alignItems="center"
               borderRadius="16px"
               lineHeight="1.43"
               fontSize="13px"
               minWidth="32px"
-              bg={pageNumber == currentPage && "rgba(255,255,255, 0.08)"}
+              bg={pageNumber == currentPage && chosen}
+              // colorScheme="whiteAlpha"
+              // colorScheme='gray'
             >
               {pageNumber}
             </Box>
@@ -125,7 +133,8 @@ const Pagination = (props) => {
             h="32px"
             textAlign="center"
             margin="auto 4px"
-            color="rgba(255,255,255, 0.87)"
+            // color="rgba(255,255,255, 0.87)"
+            color={iconColors}
             display="flex"
             alignItems="center"
             borderRadius="16px"

@@ -9,7 +9,7 @@ export const Notifications = () => {
   return (
     <NotificationList>
       {notifications.map((notification) => (
-        <NotificationItem key={notification.id} notification={notification} />
+        <NotificationItem key={notification.id} notification={notification} autoHideDuration={1} />
       ))}
     </NotificationList>
   )

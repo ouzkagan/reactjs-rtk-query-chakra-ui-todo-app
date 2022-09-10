@@ -26,7 +26,7 @@ export const NotificationList = ({ children }) => {
         <ul
           aria-live="assertive"
           className={clsx(
-            'flex fixed z-50 flex-col gap-4 m-4 lg:m-8 pointer-events-none',
+            'notification-list bottom-right',
             positions[position]
           )}
         >
