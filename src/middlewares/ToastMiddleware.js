@@ -93,16 +93,16 @@ const ToastMiddleware = (store) => (next) => (action) => {
       })
     );
   }
-  if (getTodos.matchRejected(action)) {
-    console.log(action);
-  }
+  // if (getTodos.matchRejected(action)) {
+  //   console.log(action);
+  // }
 
   if (action.type.includes("rejected")) {
-    if(action.error.message == "rejected"){
+    if(action.error.message == "Rejected"){
       store.dispatch(
         addNotification({
           message: `Server is not responding. ${
-            action.payload && "Error:" + action?.payload?.data
+            action.payload && "Error: " + action?.payload?.data
           } `,
           type: "warning",
         })
