@@ -1,14 +1,10 @@
 import {
-  Badge,
-  Box,
-  Button,
-  Center,
+  Badge, Center,
   Checkbox,
   Flex,
   Heading,
   HStack,
   IconButton,
-  Select,
   Skeleton,
   Spacer,
   Spinner,
@@ -22,8 +18,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { createSelector } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
-
 import Pagination from "../../components/Pagination";
 import {
   useDeleteTodoMutation,
@@ -35,62 +29,7 @@ import TodoDetail from "./TodoDetail";
 
 // setNotificationDuration,
 
-import { useAppDispatch } from '../../app/hooks/index';
-
-const Filters = ({ filter, setFilter,isLoading }) => {
-  const filters = ["All", "Active", "Completed"];
-
-  if(isLoading == true){
-    return (
-      <Select
-      variant="filled"
-      size="xs"
-      onChange={(e) => setFilter(parseInt(e.target.value))}
-      placeholder="Loading.."
-    />
-    )
-  }
-  return (
-    // shorthand using the `Flex` component
-    <Select
-      variant="filled"
-      size="xs"
-      onChange={(e) => setFilter(parseInt(e.target.value))}
-      
-    >
-      {filters.map((item, index) => {
-        return (
-          <option value={index} key={item}>
-            {" "}
-            {item}
-          </option>
-        );
-      })}
-    </Select>
-
-    // <Flex align="center" justify="flex-end" m="6">
-    //   {filters.map((item, index) => {
-    //     return (
-    //       <Button
-    //         colorScheme={index === filter ? "cyan" : "blue"}
-    //         px="4"
-    //         m="2"
-    //         onClick={() => setFilter(index)}
-    //         key={item}
-    //       >
-    //         {item}
-    //       </Button>
-    //     );
-    //   })}
-    //   {/* <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(1)}>
-    //     Completed
-    //   </Button>
-    //   <Button colorScheme="blue" px="4" m="2" onClick={() => setFilter(2)}>
-    //     Not Completed
-    //   </Button> */}
-    // </Flex>
-  );
-};
+import Filters from "./Filters";
 let PageSize = 10;
 
 export default function TodoList() {
@@ -101,17 +40,12 @@ export default function TodoList() {
   // router
   const navigate = useNavigate();
 
-  // rtk
-  const dispatch = useAppDispatch()
-  // const position = useNotificationPosition()
 
-  const { user } = useSelector((state) => state.user);
+  // Redux toolkit
 
   // Alternative reselect create selector approach for filtering -- RTK Query filters
   const selectCompletedTodos = useMemo(() => {
     const emptyArray = [];
-    // Return a unique selector instance for this page so that
-    // the filtered results are correctly memoized
     return createSelector(
       (inputData) => inputData,
       (data) =>
@@ -121,8 +55,6 @@ export default function TodoList() {
 
   const selectInCompletedTodos = useMemo(() => {
     const emptyArray = [];
-    // Return a unique selector instance for this page so that
-    // the filtered results are correctly memoized
     return createSelector(
       (inputData) => inputData,
       (data) =>
@@ -141,10 +73,7 @@ export default function TodoList() {
     error,
   } = useGetTodosQuery(undefined, {
     selectFromResult: (result) => ({
-      // We can optionally include the other metadata fields from the result here
       ...result,
-      // Include a field called `filteredData` in the result object,
-      // and memoize the calculation
       completedTodos: selectCompletedTodos(result),
       inCompletedTodos: selectInCompletedTodos(result),
     }),
@@ -161,11 +90,10 @@ export default function TodoList() {
   };
 
   // paginated data
-
   const paginatedTodos = useMemo(() => {
     let filterType;
     if (filter == 0) {
-      filterType = (item) => {
+      filterType = () => {
         return true;
       };
     }
@@ -200,28 +128,8 @@ export default function TodoList() {
   // }, [filter, isUpdating, isDeleting]);
 
   let content;
-  if (!user?.username) {
-    content = (
-      <VStack
-        divider={<StackDivider />}
-        borderColor="gray.100"
-        borderWidth="2px"
-        p="4"
-        borderRadius="lg"
-        w="100%"
-        maxW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
-        minW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
-        alignItems="stretch"
-      >
-        <Box textAlign="center" size="2xl" p="10">
-          You must be logged in to see this content{" "}
-          <Button ml="4" onClick={() => navigate("/profile")}>
-            Login
-          </Button>
-        </Box>
-      </VStack>
-    );
-  } else if (isLoading) {
+
+  if (isLoading) {
     content = (
       <VStack
         divider={<StackDivider />}
@@ -251,7 +159,7 @@ export default function TodoList() {
                 <option value="Active">Active</option>
                 <option value="Completed">Completed</option>
               </Select> */}
-            <Filters setFilter={setFilter} filter={filter} isLoading={true} />
+            <Filters setFilter={setFilter} isLoading={true} />
           </Stack>
         </Flex>
         {Array.from(Array(10).keys()).map((todo, index) => {
@@ -386,9 +294,8 @@ export default function TodoList() {
                     isChecked={todo.isCompleted}
                     id={todo.id}
                     key={todo.id}
-                    onChange={() =>{
-                     
-                      updateTodo({ ...todo, isCompleted: !todo.isCompleted })
+                    onChange={() => {
+                      updateTodo({ ...todo, isCompleted: !todo.isCompleted });
                     }}
                     isDisabled={todo.id.includes("temp")}
                     // size="lg"

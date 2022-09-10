@@ -99,10 +99,7 @@ export const NotificationItem = ({
   };
 
   // Call the dismiss function after a certain timeout
-  const [, cancel, reset] = useTimeoutFn(
-    handleDismiss,
-    2000 ?? duration
-  );
+  const [, cancel, reset] = useTimeoutFn(handleDismiss, 2000 ?? duration);
 
   // Reset or cancel dismiss timeout based on mouse interactions
   const onMouseEnter = () => cancel();
@@ -115,7 +112,6 @@ export const NotificationItem = ({
     }
   }, [isPresent]);
 
-  
   return (
     <Box
       as={motion.li}

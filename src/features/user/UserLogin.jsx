@@ -11,7 +11,9 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Stack, Text, useColorModeValue
+  Stack,
+  Text,
+  useColorModeValue
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, useWatch } from "react-hook-form";
@@ -20,19 +22,19 @@ import { FiFile } from "react-icons/fi";
 import * as yup from "yup";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FileUpload from "../../components/FileUpload";
-import { login } from "./userSlice";
-
+import { login, useUser } from "./userSlice";
 const CFaUserAlt = chakra(FaUserAlt);
 
 export default function userLogin() {
   // redux
-  const user = useSelector((state) => state.user);
+  const { user } = useUser();
+
   const dispatch = useDispatch();
   // router
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // Form
   const [preview, setPreview] = useState(undefined);
   const schema = yup.object().shape({
@@ -45,12 +47,12 @@ export default function userLogin() {
       //   return user?.user?.image
       // })
       .test("filePresence", "Please add avatar", (value) => {
-        if (user?.user?.image) return true
+        if (user?.user?.image) return true;
         if (value.length == 0) return false; // attachment is optional
         return true;
       })
       .test("fileSize", "The file is too large", (value) => {
-        if (user?.user?.image) return true
+        if (user?.user?.image) return true;
         return value && value?.[0]?.size <= 2000000;
       }),
   });
@@ -70,20 +72,24 @@ export default function userLogin() {
 
   const onSubmit = handleSubmit((data) => {
     // console.log("On Submit: ", { ...data, preview });
-    dispatch(login({username: data.username, image: preview || user?.user?.image, imageFile: JSON.stringify(data.file_)}));
-    navigate('/todos')
+    dispatch(
+      login({
+        username: data.username,
+        image: preview || user?.user?.image,
+        imageFile: JSON.stringify(data.file_),
+      })
+    );
+    navigate("/todos");
   });
 
-
   const getBase64 = (file) => {
-    return new Promise((resolve,reject) => {
-       const reader = new FileReader();
-       reader.onload = () => resolve(reader.result);
-       reader.onerror = error => reject(error);
-       reader.readAsDataURL(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
     });
-  
-    }
+  };
   // Watch image upload.
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
@@ -101,9 +107,9 @@ export default function userLogin() {
       }
 
       // store base64 in local storage
-      getBase64(file_[0]).then(base64 => {
+      getBase64(file_[0]).then((base64) => {
         // console.log("file stored",base64);
-        setPreview(base64)
+        setPreview(base64);
       });
 
       // const objectUrl = URL.createObjectURL(file_[0]);
@@ -125,7 +131,6 @@ export default function userLogin() {
       justifyContent="center"
       alignItems="center"
       color={textColor}
-      
     >
       <Stack
         flexDir="column"
@@ -143,7 +148,7 @@ export default function userLogin() {
         <Box minW={{ base: "90%", md: "468px" }}>
           <form onSubmit={onSubmit}>
             <Heading size="lg" color={textColor} mb={3}>
-              Profile {user?.user?.username && 'of ' + user?.user?.username}
+              Profile {user?.user?.username && "of " + user?.user?.username}
             </Heading>
             <Stack spacing={4} p="1rem">
               <FormControl isInvalid={!!errors.file_} isRequired>
@@ -169,7 +174,11 @@ export default function userLogin() {
                     width="100%"
                     gap={4}
                   >
-                    <Avatar bg="teal.500" size="2xl" src={preview || user?.user?.image} />
+                    <Avatar
+                      bg="teal.500"
+                      size="2xl"
+                      src={preview || user?.user?.image}
+                    />
                     <Button leftIcon={<Icon as={FiFile} />}>
                       Upload Avatar
                     </Button>
@@ -214,14 +223,15 @@ export default function userLogin() {
                 // colorScheme="teal"
                 width="full"
               >
-                {user.user?.username && !!user.user?.image ? 'Save' : 'Login'}
+                {user.user?.username && !!user.user?.image ? "Save" : "Login"}
               </Button>
-              {!!user.user?.username &&
+              {!!user.user?.username && (
                 <Text>
-                  You are already logged in go to <button onClick={()=>navigate('/todos')}>Todos</button>
+                  You are already logged in go to{" "}
+                  <button onClick={() => navigate("/todos")}>Todos</button>
                   {/* <button onClick={()=>dispatch(logout())}>Logout</button> */}
                 </Text>
-              }
+              )}
             </Stack>
           </form>
         </Box>

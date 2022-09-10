@@ -7,27 +7,18 @@ import { VStack } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { Notifications } from "./features/notification/components/Notifications";
 import TodoList from "./features/todos/TodoList";
 import UserLogin from "./features/user/UserLogin";
-
-
 function App() {
-
-  // const user = useSelector((state) => state.user)
-  // const numOfCakes = useSelector((state) => state.cake.numOfCakes)
-  // const dispatch = useDispatch()
-
-  // useEffect(() => {
-  //   dispatch(fetchUsers())
-  // }, [])
-
   return (
     <VStack p={4} minHeight="100%">
-      
-        <Header />
+      <Header />
       <Routes>
+      <Route element={<ProtectedRoute />}>
         <Route path="*" element={<TodoList />} />
+      </Route>
         <Route path="/profile" element={<UserLogin />} />
       </Routes>
       <Notifications />

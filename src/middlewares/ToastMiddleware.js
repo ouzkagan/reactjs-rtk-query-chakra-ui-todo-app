@@ -6,14 +6,23 @@ import {
 } from "../features/api/apiSlice";
 
 import { addNotification } from "../features/notification/notificationSlice";
-import { login } from "../features/user/userSlice";
+import { login, logout } from "../features/user/userSlice";
 
 const ToastMiddleware = (store) => (next) => (action) => {
   if (action.type == login.type) {
     // if user does't exist say registered?
     store.dispatch(
       addNotification({
-        message: `Logged in successfully.`,
+        message: `Logged in successfully. Welcome ${store.getState().user?.user?.username}!`,
+        type: "success",
+      })
+    );
+  }
+  if (action.type == logout.type) {
+    // if user does't exist say registered?
+    store.dispatch(
+      addNotification({
+        message: `Logged out successfully.`,
         type: "success",
       })
     );
@@ -97,27 +106,6 @@ const ToastMiddleware = (store) => (next) => (action) => {
     }
   }
 
-  // switch (action.type) {
-  //   // case (updateTodo.matchPending(action))
-  //   case "user/login":
-  //     // if user logged in: (i) New information saved successfully
-  //     // if user logged out: (i) Logged out successfully
-  //     console.log("update mutation pending: toast: optimistic update done");
-  //     break;
-  //   case (action.type.includes('api')):
-
-  //   case "api/executeMutation/pending":
-  //     console.log("update mutation pending: toast: optimistic update done");
-  //     break;
-  //   case "api/executeMutation/fulfilled":
-  //     console.log(
-  //       "update mutation fulfilled: toast: success response from server"
-  //     );
-  //     break;
-  //   default:
-  //     // console.log("deafult response");
-  // }
-  // console.log('fulfilled')
   return next(action);
 };
 

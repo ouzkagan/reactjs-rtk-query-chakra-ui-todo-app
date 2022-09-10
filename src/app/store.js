@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { apiSlice } from "../features/api/apiSlice";
-import cakeReducer from '../features/cake/cakeSlice';
 import notificationReducer from '../features/notification/notificationSlice';
 import userReducer from '../features/user/userSlice';
 import ToastMiddleware from '../middlewares/ToastMiddleware';
@@ -17,7 +16,6 @@ const persistConfig = {
 const rootReducer = combineReducers({
   // user: userReducer,
   user: persistReducer(persistConfig, userReducer),
-  cake: cakeReducer,
   notifications : notificationReducer,
   [apiSlice.reducerPath]: apiSlice.reducer
 })

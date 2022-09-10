@@ -1,46 +1,31 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from 'axios';
+import { createSlice } from "@reduxjs/toolkit";
+
+import { useAppSelector } from "../../app/hooks/index";
 
 const initialState = {
-  loading:false,
+  loading: false,
   user: {},
-  error: ''
-}
-
-
-export const fetchUser = createAsyncThunk('user/fetchUser', ()=>{
-  return axios
-  .get('https://jsonplaceholder.typicode.com/users/1')
-  .then((response)=> response.data)
-})
+  error: "",
+};
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
+  initialState,
   reducers: {
-    login: (state, action) =>{
-      state.user  = action.payload
+    login: (state, action) => {
+      state.user = action.payload;
     },
     logout: (state) => {
-      state.user = {}
-    }
+      state.user = {};
+    },
   },
-  initialState,
-  extraReducers: builder => {
-    builder.addCase(fetchUser.pending, (state)=>{
-      state.loading = true
-    })
-    builder.addCase(fetchUser.fulfilled, (state, action)=>{
-      state.loading = false
-      state.user = action.payload
-    })
-    builder.addCase(fetchUser.rejected, (state, action)=>{
-      state.loading = false
-      state.error = action.error.message
-    })
-  }
-})
+});
 
+const selectUser = (state) => state.user;
+const selectIsAuthenticated = ({ user }) => !!user.user.username;
+// Hooks
+export const useUser = () => useAppSelector(selectUser);
+export const useIsAuthenticated = () => useAppSelector(selectIsAuthenticated);
 
-export default userSlice.reducer
-export const { login, logout} = userSlice.actions
-
+export default userSlice.reducer;
+export const { login, logout } = userSlice.actions;
