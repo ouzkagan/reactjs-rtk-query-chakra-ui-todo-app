@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FileUpload from "../../components/FileUpload";
-import { login, useUser } from "./userSlice";
+import { login, useIsAuthenticated, useUser } from "./userSlice";
 const CFaUserAlt = chakra(FaUserAlt);
 
 export default function userLogin() {
@@ -33,12 +33,16 @@ export default function userLogin() {
   const { user } = useUser();
 
   const dispatch = useDispatch();
+  const isAuthenticated = useIsAuthenticated()
   // router
   const navigate = useNavigate();
   // Form
   const [preview, setPreview] = useState(undefined);
   const schema = yup.object().shape({
-    username: yup.string().min(3).max(20).required(),
+    username: yup.string().min(3).max(20).required().matches(
+      /^[a-zA-Z]+$/,
+      "This field cannot contain white special character"
+    ),
     // password: yup.string().min(8).required(),
     file_: yup
       .mixed()
@@ -47,12 +51,12 @@ export default function userLogin() {
       //   return user?.user?.image
       // })
       .test("filePresence", "Please add avatar", (value) => {
-        if (user?.user?.image) return true;
+        if (user?.image) return true;
         if (value.length == 0) return false; // attachment is optional
         return true;
       })
       .test("fileSize", "The file is too large", (value) => {
-        if (user?.user?.image) return true;
+        if (user?.image) return true;
         return value && value?.[0]?.size <= 2000000;
       }),
   });
@@ -75,7 +79,7 @@ export default function userLogin() {
     dispatch(
       login({
         username: data.username,
-        image: preview || user?.user?.image,
+        image: preview || user?.image,
         imageFile: JSON.stringify(data.file_),
       })
     );
@@ -122,6 +126,7 @@ export default function userLogin() {
   const bg = useColorModeValue("cyan.50", "gray.900");
   const textColor = useColorModeValue("gray.800", "white");
 
+
   return (
     <Flex
       flexDirection="column"
@@ -148,7 +153,7 @@ export default function userLogin() {
         <Box minW={{ base: "90%", md: "468px" }}>
           <form onSubmit={onSubmit}>
             <Heading size="lg" color={textColor} mb={3}>
-              Profile {user?.user?.username && "of " + user?.user?.username}
+              Profile {user?.username && "of " + user?.username}
             </Heading>
             <Stack spacing={4} p="1rem">
               <FormControl isInvalid={!!errors.file_} isRequired>
@@ -177,7 +182,7 @@ export default function userLogin() {
                     <Avatar
                       bg="teal.500"
                       size="2xl"
-                      src={preview || user?.user?.image}
+                      src={preview || user?.image}
                     />
                     <Button leftIcon={<Icon as={FiFile} />}>
                       Upload Avatar
@@ -207,7 +212,7 @@ export default function userLogin() {
                     name="username"
                     // ref={register}
                     {...register("username")}
-                    defaultValue={user.user?.username}
+                    defaultValue={user?.username}
                   />
                 </InputGroup>
                 <FormErrorMessage>
@@ -223,9 +228,9 @@ export default function userLogin() {
                 // colorScheme="teal"
                 width="full"
               >
-                {user.user?.username && !!user.user?.image ? "Save" : "Login"}
+                {user?.username && !!user?.image ? "Save" : "Login"}
               </Button>
-              {!!user.user?.username && (
+              {isAuthenticated && (
                 <Text>
                   You are already logged in go to{" "}
                   <button onClick={() => navigate("/todos")}>Todos</button>
