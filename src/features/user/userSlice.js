@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { useAppSelector } from "../../app/hooks/index";
+import { useAppSelector } from "../../app/redux-hooks/index";
 
 const initialState = {
   loading: false,

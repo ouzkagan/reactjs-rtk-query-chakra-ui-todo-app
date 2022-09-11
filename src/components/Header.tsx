@@ -24,7 +24,7 @@ import {
 
 import { Link } from "react-router-dom";
 
-export default function Header() {
+const Header= (): JSX.Element=> {
   const { user } = useUser();
   const isAuthenticated = useIsAuthenticated();
   const dispatch = useDispatch();
@@ -36,12 +36,10 @@ export default function Header() {
     ? {
         // logged in
         // bg: bg,
-        borderRadius: "3px",
         borderColor: "transparent",
       }
     : {
         // not logged in
-        borderRadius: "3px",
         borderColor: "gray.100",
         borderWidth: "2px",
         border: "0px",
@@ -71,7 +69,7 @@ export default function Header() {
         <Box alignSelf="flex-end">
           {isAuthenticated && (
             <Link to="/profile">
-              <IconButton borderRadius="3px" size="lg" icon={<FiUser />} />
+              <IconButton aria-label="User Profile" borderRadius="3px" size="lg" icon={<FiUser />} />
               {/* <Button
             borderRadius="3px"
             size="lg"
@@ -82,6 +80,7 @@ export default function Header() {
             </Link>
           )}
           <IconButton
+            aria-label="Toggle Theme"
             borderRadius="3px"
             size="lg"
             icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
@@ -113,3 +112,5 @@ export default function Header() {
     </HStack>
   );
 }
+
+export default Header

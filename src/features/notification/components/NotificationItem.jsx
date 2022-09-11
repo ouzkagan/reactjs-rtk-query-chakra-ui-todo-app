@@ -5,7 +5,7 @@ import { useTimeoutFn, useUpdateEffect } from "react-use";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { FaCheckCircle, FaExclamation, FaInfoCircle } from "react-icons/fa";
 
-import { useAppDispatch } from "../../../app/hooks/index";
+import { useAppDispatch } from "../../../app/redux-hooks/index";
 import {
   dismissNotification,
   useNotificationDuration,

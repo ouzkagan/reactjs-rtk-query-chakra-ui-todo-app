@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
 
-import { useAppSelector } from "../../app/hooks/index";
+import { useAppSelector } from "../../app/redux-hooks/index";
 
 const initialState = {
   notifications: [],
