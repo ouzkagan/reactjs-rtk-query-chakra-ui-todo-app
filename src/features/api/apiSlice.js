@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+// const baseApiUrl = import.meta.env.VITE_REACT_APP_BASE_API
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://631347b3b466aa9b03965cfe.mockapi.io/",
+    baseUrl: import.meta.env.VITE_REACT_APP_BASE_API,
   }),
   endpoints: (builder) => ({
     getTodos: builder.query({
@@ -95,7 +96,18 @@ export const apiSlice = createApi({
         method: "DELETE",
         body: id,
       }),
-      
+      // pessimistic update when don't wanna fetch all todos again
+
+      // async onQueryStarted({ id:todoId }, { dispatch, queryFulfilled }) {
+      //   try {
+      //     const { data } = await queryFulfilled
+      //     const patchResult = dispatch(
+      //       apiSlice.util.updateQueryData('getTodos', undefined, (draft) => {
+      //         draft.splice(draft.findIndex((item)=>item.id === todoId),1)
+      //       })
+      //     )
+      //   } catch {}
+      // },
       invalidatesTags: ['Todo']
       // invalidatesTags: (result, error, arg) => [{ type: "Todo", id: arg.id }],
     }),
