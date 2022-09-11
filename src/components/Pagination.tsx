@@ -1,18 +1,19 @@
 import { Box, HStack, IconButton, useColorModeValue } from "@chakra-ui/react";
-import React from "react";
 import { CgChevronLeft, CgChevronRight } from "react-icons/cg";
+import type { PaginationParams } from "../hooks/usePagination";
 import { DOTS, usePagination } from "../hooks/usePagination";
 
-const Pagination = (props) => {
-  const {
-    onPageChange,
-    totalCount,
-    siblingCount = 1,
-    currentPage,
-    pageSize,
-    className,
-  } = props;
+interface PaginationProps extends PaginationParams {
+  onPageChange: Function;
+}
 
+const Pagination = ({
+  onPageChange,
+  totalCount,
+  siblingCount,
+  currentPage,
+  pageSize,
+}: PaginationProps): JSX.Element | null => {
   const paginationRange = usePagination({
     currentPage,
     totalCount,
@@ -21,7 +22,7 @@ const Pagination = (props) => {
   });
 
   // If there are less than 2 times in pagination range we shall not render the component
-  if (currentPage === 0 || paginationRange.length < 2) {
+  if (currentPage === 0 || paginationRange?.length < 2) {
     return null;
   }
 
@@ -37,15 +38,12 @@ const Pagination = (props) => {
 
   // chakra theme colors
   const bg = useColorModeValue("cyan.50", "gray.600");
-  const iconColors = useColorModeValue("black","rgba(255,255,255, 0.87)")
-  const chosen =  useColorModeValue("#E2E8F0","rgba(255,255,255, 0.08)")
+  const iconColors = useColorModeValue("black", "rgba(255,255,255, 0.87)");
+  const chosen = useColorModeValue("#E2E8F0", "rgba(255,255,255, 0.08)");
   return (
     <>
-      <HStack spacing="12px" justifyContent='flex-end'>
-        <Box
-        onClick={onPrevious}
-        
-        >
+      <HStack spacing="12px" justifyContent="flex-end">
+        <Box onClick={onPrevious}>
           <IconButton
             aria-label="First Page"
             icon={<CgChevronLeft />}
@@ -65,7 +63,7 @@ const Pagination = (props) => {
             bg="none"
           />
         </Box>
-        {paginationRange.map((pageNumber, index) => {
+        {paginationRange.map((pageNumber: any, index: number) => {
           // If the pageItem is a DOT, render the DOTS unicode character
           if (pageNumber === DOTS) {
             return (
@@ -75,7 +73,7 @@ const Pagination = (props) => {
               <Box
                 w="40px"
                 // bg="yellow.200"
-                key={pageNumber + '_' +index}
+                key={pageNumber + "_" + index}
               >
                 &#8230;
               </Box>
@@ -112,7 +110,7 @@ const Pagination = (props) => {
               lineHeight="1.43"
               fontSize="13px"
               minWidth="32px"
-              bg={pageNumber == currentPage && chosen}
+              bg={pageNumber == currentPage ? chosen : "transparent"}
               // colorScheme="whiteAlpha"
               // colorScheme='gray'
             >
@@ -120,10 +118,7 @@ const Pagination = (props) => {
             </Box>
           );
         })}
-        <Box 
-        onClick={onNext}
-        
-          >
+        <Box onClick={onNext}>
           <IconButton
             aria-label="Last Page"
             icon={<CgChevronRight />}

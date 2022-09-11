@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useGetTodosQuery, useUpdateTodoMutation } from "../api/apiSlice";
@@ -51,7 +51,7 @@ export default function TodoDetail() {
   //We can just take data from existing query. There is no need to fetch individual todo again.
   const { todo } = useGetTodosQuery(undefined, {
     selectFromResult: ({ data }) => ({
-      todo: data?.find((todo) => todo.id === id),
+      todo: !!id ? data?.find((todo) => todo.id === parseInt(id)): undefined,
     }),
   });
   const [newContent, setNewContent] = useState("");
@@ -64,7 +64,7 @@ export default function TodoDetail() {
         <Checkbox
           colorScheme={todo.isCompleted ? "gray" : ""}
           defaultChecked={todo.isCompleted}
-          id={todo.id}
+          id={todo.id.toString()}
           onChange={() =>
             updateTodo({ ...todo, isCompleted: !todo.isCompleted })
           }
@@ -105,7 +105,7 @@ export default function TodoDetail() {
               loadingText="Updating"
               mr="4"
               onClick={() => {
-                updateTodo({ ...todo, content: newContent || todo.content });
+                updateTodo({ ...todo, content: newContent || todo?.content });
                 navigate(`/`);
               }}
             >

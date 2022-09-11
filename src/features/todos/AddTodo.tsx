@@ -6,7 +6,7 @@ import {
   Input,
   InputGroup
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAddTodoMutation } from "../api/apiSlice";
 
 import { useForm } from "react-hook-form";
@@ -14,8 +14,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-export default function AddTodo() {
-  const [newTodo, setNewTodo] = useState("");
+const AddTodo = (): JSX.Element => {
+  type FormValues = {
+    content: string;
+  };
 
   const [addTodo, { isLoading, isSuccess, isError }] = useAddTodoMutation();
 
@@ -28,13 +30,13 @@ export default function AddTodo() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<FormValues>({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   const onSubmit = handleSubmit(({ content }) => {
-    addTodo({ userId: 1, content: content, isCompleted: false });
+    addTodo({ content: content, isCompleted: false });
   });
   useEffect(() => {
     if (isSuccess) {
@@ -50,7 +52,7 @@ export default function AddTodo() {
             <Input
               type="text"
               placeholder="Buy milk.."
-              name="content"
+              // name="content"
               // ref={register}
               {...register("content")}
               // defaultValue={user?.content}
@@ -68,4 +70,5 @@ export default function AddTodo() {
       </HStack>
     </form>
   );
-}
+};
+export default AddTodo

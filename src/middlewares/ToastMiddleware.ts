@@ -1,3 +1,5 @@
+import { Middleware } from "redux";
+import { RootState } from "../app/store";
 import {
   addTodo,
   deleteTodo,
@@ -8,7 +10,12 @@ import {
 import { addNotification } from "../features/notification/notificationSlice";
 import { login, logout } from "../features/user/userSlice";
 
-const ToastMiddleware = (store) => (next) => (action) => {
+
+
+const ToastMiddleware: Middleware<
+  {}, // Most middleware do not modify the dispatch return value
+  RootState
+> = (store) => (next) => (action) => {
   if (action.type == login.type) {
     // if user does't exist say registered?
     store.dispatch(
@@ -98,7 +105,7 @@ const ToastMiddleware = (store) => (next) => (action) => {
   // }
 
   if (action.type.includes("rejected")) {
-    if(action.error.message == "Rejected"){
+    if (action.error.message == "Rejected") {
       store.dispatch(
         addNotification({
           message: `Server problem. ${
@@ -112,5 +119,5 @@ const ToastMiddleware = (store) => (next) => (action) => {
 
   return next(action);
 };
-
+// export ToastMiddleware
 export default ToastMiddleware;

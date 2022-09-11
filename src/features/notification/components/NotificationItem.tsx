@@ -5,12 +5,28 @@ import { useTimeoutFn, useUpdateEffect } from "react-use";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { FaCheckCircle, FaExclamation, FaInfoCircle } from "react-icons/fa";
 
-import { useAppDispatch } from "../../../app/redux-hooks/index";
+import { useAppDispatch } from "../../../app/hooks/index";
+import type { NotificationInterface } from "../notificationSlice";
 import {
   dismissNotification,
   useNotificationDuration,
   useNotificationPosition
 } from "../notificationSlice";
+
+export interface Notification extends NotificationInterface {
+  /**
+   * Optional callback function to run side effects after the notification has closed.
+   */
+  onClose?: () => void;
+  /**
+   * Optionally add an action to the notification through a ReactNode
+   */
+  action?: React.ReactNode;
+}
+
+type Props = {
+  notification: Notification;
+};
 
 /**
  * To handle different positions of the notification, we need to change the
@@ -19,7 +35,7 @@ import {
  * @param position - The position of the Notification
  * @param fromEdge - The length of the position from the edge in pixels
  */
-const getMotionDirectionAndPosition = (position, fromEdge = 24) => {
+const getMotionDirectionAndPosition = (position: string, fromEdge = 24) => {
   const directionPositions = ["top", "bottom"];
   const factorPositions = ["top-right", "bottom-right"];
 
@@ -34,7 +50,7 @@ const getMotionDirectionAndPosition = (position, fromEdge = 24) => {
 };
 
 const motionVariants = {
-  initial: (position) => {
+  initial: (position: string) => {
     return {
       opacity: 0,
       ...getMotionDirectionAndPosition(position),
@@ -50,7 +66,7 @@ const motionVariants = {
       ease: [0.4, 0, 0.2, 1],
     },
   },
-  exit: (position) => {
+  exit: (position: string) => {
     return {
       opacity: 0,
       ...getMotionDirectionAndPosition(position, 30),
@@ -85,7 +101,7 @@ const notificationIcons = {
 
 export const NotificationItem = ({
   notification: { id, autoHideDuration, message, onClose, type = "info" },
-}) => {
+}: Props) => {
   const dispatch = useAppDispatch();
   const duration = useNotificationDuration();
   const isPresent = useIsPresent();
@@ -143,6 +159,7 @@ export const NotificationItem = ({
     >
       <Box display="flex" justifyContent="center" gap="0.5rem">
         <IconButton
+          aria-label="Dismiss toast"
           padding="0.25rem"
           borderRadius="0.25rem"
           transitionDuration="100ms"
@@ -161,6 +178,7 @@ export const NotificationItem = ({
 
       <Box pl={4} ml="auto">
         <IconButton
+          aria-label="Dismiss toast"
           padding="0.25rem"
           borderRadius="0.25rem"
           transitionDuration="100ms"

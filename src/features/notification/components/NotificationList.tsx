@@ -3,8 +3,13 @@ import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { useNotificationPosition } from "../notificationSlice";
 
+type Props = {
+  children: React.ReactNode
+}
+
+// const positions:Record<NotificationPositions,any> = {
 const positions = {
-  top: {
+  'top': {
     top: "0",
     right: "0",
     left: "0",
@@ -20,7 +25,7 @@ const positions = {
     left: "0",
     alignItems: "flex-start",
   },
-  bottom: {
+  'bottom': {
     bottom: "0",
     right: "0",
     left: "0",
@@ -38,7 +43,7 @@ const positions = {
   },
 };
 
-export const NotificationList = ({ children }) => {
+export const NotificationList = ({ children }:Props) => {
   const position = useNotificationPosition();
 
   return (
@@ -57,6 +62,7 @@ export const NotificationList = ({ children }) => {
           flexDirection="column"
           pointerEvents="none"
           gap="1rem"
+          // @ts-ignore:
           {...positions[position]}
         >
           <AnimatePresence initial={false}>{children}</AnimatePresence>

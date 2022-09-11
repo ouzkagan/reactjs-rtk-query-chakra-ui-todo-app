@@ -1,28 +1,40 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+import type { Todo } from "../types";
 // const baseApiUrl = import.meta.env.VITE_REACT_APP_BASE_API
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_REACT_APP_BASE_API,
   }),
+  tagTypes: ["Todo"],
+
   endpoints: (builder) => ({
-    getTodos: builder.query({
+    getTodos: builder.query<Todo[], void>({
       query: () => "/todos",
-      transformResponse: (res) => res.sort((a, b) => b.id - a.id),
+      transformResponse: (res: Todo[]): Todo[] =>
+        res.sort((a, b) => b.id - a.id),
       // providesTags: ['Todos']
-      providesTags: (result = [], error, arg) => [
-        "Todo",
-        ...result.map(({ id }) => ({ type: "Todo", id })),
-      ],
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.map(({ id }) => ({ type: 'Todo' as const, id })), 'Todo']
+          : ['Todo'],
+
+      // providesTags: (result = [], error, arg) => [
+      //   "Todo",
+      //   ...result.map(({ id }) => ({ type: "Todo", id })),
+      // ],
     }),
-    getTodo: builder.query({
+    getTodo: builder.query<Todo[], void>({
       query: (id) => "/todos/" + id,
       // providesTags: ['Todos'],
       // keepUnusedDataFor:60*60*60
-      providesTags: (result, error, arg) => [{ type: "Todo", id: arg }],
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.map(({ id }) => ({ type: 'Todo' as const, id })), 'Todo']
+          : ['Todo'],
+      
     }),
-    addTodo: builder.mutation({
+    addTodo: builder.mutation<Todo, Omit<Todo, 'id'>>({
       query: (todo) => ({
         url: "/todos",
         method: "POST",
@@ -37,6 +49,7 @@ export const apiSlice = createApi({
             // Updating draft data with new todo item
             draft.unshift({
               ...todo,
+              // @ts-ignore: Type 'string' is not assignable to type 'number'.ts(2322)
               id: "temp" + Math.random(),
             });
           })
@@ -72,16 +85,24 @@ export const apiSlice = createApi({
         // `updateQueryData` requires the endpoint name and cache key arguments,
         // so it knows which piece of cache state to update
         const patchResult = dispatch(
-          apiSlice.util.updateQueryData("getTodos", undefined, (draft) => {
-            // The `draft` is Immer-wrapped and can be "mutated" like in createSlice
-            const todo = draft.find((todo) => todo.id === todoId);
-            todo.content = content;
-            todo.isCompleted = isCompleted;
-            // todo = {content, isCompleted}
-            // if (todo) {
-            //   todo.reactions[reaction]++
-            // }
-          })
+          apiSlice.util.updateQueryData(
+            "getTodos",
+            undefined,
+            (draft: Todo[]) => {
+              // The `draft` is Immer-wrapped and can be "mutated" like in createSlice
+              const todo: Todo | undefined = draft.find(
+                (todo: Todo) => todo.id === todoId
+              );
+              if (todo !== undefined) {
+                todo.content = content;
+                todo.isCompleted = isCompleted;
+              }
+              // todo = {content, isCompleted}
+              // if (todo) {
+              //   todo.reactions[reaction]++
+              // }
+            }
+          )
         );
         try {
           await queryFulfilled;
@@ -108,7 +129,7 @@ export const apiSlice = createApi({
       //     )
       //   } catch {}
       // },
-      invalidatesTags: ['Todo']
+      invalidatesTags: ["Todo"],
       // invalidatesTags: (result, error, arg) => [{ type: "Todo", id: arg.id }],
     }),
   }),

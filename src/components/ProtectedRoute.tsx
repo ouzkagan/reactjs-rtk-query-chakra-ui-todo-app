@@ -21,7 +21,7 @@ const ProtectedRoute = () => {
         minW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
         alignItems="stretch"
       >
-        <Box textAlign="center" size="2xl" p="10">
+        <Box textAlign="center" p="10">
           You must be logged in to see this content{" "}
           <Button ml="4" onClick={() => navigate("/profile")}>
             Login

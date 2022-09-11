@@ -1,5 +1,6 @@
 import {
-  Badge, Center,
+  Badge,
+  Center,
   Checkbox,
   Flex,
   Heading,
@@ -13,20 +14,21 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
 import Pagination from "../../components/Pagination";
 import {
   useDeleteTodoMutation,
   useGetTodosQuery,
   useUpdateTodoMutation
 } from "../api/apiSlice";
+import type { Todo } from "../types";
 import AddTodo from "./AddTodo";
 import TodoDetail from "./TodoDetail";
-
 // setNotificationDuration,
 
 import Filters from "./Filters";
@@ -40,25 +42,24 @@ export default function TodoList() {
   // router
   const navigate = useNavigate();
 
-
   // Redux toolkit
 
   // Alternative reselect create selector approach for filtering -- RTK Query filters
   const selectCompletedTodos = useMemo(() => {
-    const emptyArray = [];
+    const emptyArray: any = [];
     return createSelector(
-      (inputData) => inputData,
-      (data) =>
-        data?.data?.filter((todo) => todo.isCompleted === true) ?? emptyArray
+      (inputData: any) => inputData,
+      (data: RootState) =>
+        data?.data?.filter((todo: Todo) => todo.isCompleted === true) ?? []
     );
   }, []);
 
   const selectInCompletedTodos = useMemo(() => {
     const emptyArray = [];
     return createSelector(
-      (inputData) => inputData,
-      (data) =>
-        data?.data?.filter((todo) => todo.isCompleted === false) ?? emptyArray
+      (inputData: any) => inputData,
+      (data: RootState) =>
+        data?.data?.filter((todo: Todo) => todo.isCompleted === false) ?? []
     );
   }, []);
 
@@ -81,29 +82,32 @@ export default function TodoList() {
 
   const [updateTodo, { isLoading: isUpdating }] = useUpdateTodoMutation();
   const [deleteTodo, { isLoading: isDeleting }] = useDeleteTodoMutation();
-  const [deletingId, setDeletingId] = useState("");
+  const [deletingId, setDeletingId] = useState<number>(-1);
 
   // detect which one is getting deleted - show spinner on delete icon
-  const deleteTodoSide = (id) => {
-    setDeletingId(id.id);
-    deleteTodo(id);
+  const deleteTodoSide = (todo: Todo) => {
+    setDeletingId(todo.id);
+    deleteTodo({ id: todo.id });
   };
 
   // paginated data
   const paginatedTodos = useMemo(() => {
-    let filterType;
+    let filterType = (item: Todo): boolean => {
+      return true;
+    };
+
     if (filter == 0) {
-      filterType = () => {
+      filterType = (item) => {
         return true;
       };
     }
     if (filter == 1) {
-      filterType = (item) => {
+      filterType = (item: Todo) => {
         return item?.isCompleted == false;
       };
     }
     if (filter == 2) {
-      filterType = (item) => {
+      filterType = (item: Todo) => {
         return item?.isCompleted == true;
       };
     }
@@ -165,14 +169,14 @@ export default function TodoList() {
         {Array.from(Array(10).keys()).map((todo, index) => {
           return (
             <HStack key={index}>
-              <Center className={todo.isCompleted ? "done" : ""}>
+              <Center>
                 <Checkbox
-                  colorScheme={todo.isCompleted ? "gray" : ""}
-                  defaultChecked={todo.isCompleted}
-                  id={todo.id}
-                  onChange={() =>
-                    updateTodo({ ...todo, isCompleted: !todo.isCompleted })
-                  }
+                  colorScheme={""}
+                  defaultChecked={false}
+                  // id={todo.id}
+                  // onChange={() =>
+                  //   updateTodo({ ...todo, isCompleted: !todo.isCompleted })
+                  // }
                 />
               </Center>
               <Skeleton
@@ -184,19 +188,21 @@ export default function TodoList() {
                 color="white"
               >
                 <Center>
-                  <Text> {todo.content}</Text>
+                  <Text> {""}</Text>
                 </Center>
               </Skeleton>
               <Spacer />
               <IconButton
+                aria-label="Edit Todo"
                 icon={<FaEdit />}
                 borderRadius="3px"
-                onClick={() => navigate(`/todos/${todo.id}`)}
+                // onClick={() => navigate(`/todos/${todo.id}`)}
               />
               <IconButton
+                aria-label="Delete Todo"
                 icon={<FaTrash />}
                 borderRadius="3px"
-                onClick={() => deleteTodo({ id: todo.id })}
+                // onClick={() => deleteTodo({ id: todo.id })}
               />
             </HStack>
           );
@@ -258,7 +264,7 @@ export default function TodoList() {
                 <option value="Active">Active</option>
                 <option value="Completed">Completed</option>
               </Select> */}
-              <Filters setFilter={setFilter} filter={filter} />
+              <Filters setFilter={setFilter} isLoading={false} />
             </Stack>
           </Flex>
           {paginatedTodos.map((todo) => {
@@ -292,17 +298,20 @@ export default function TodoList() {
                     colorScheme={todo.isCompleted ? "gray" : ""}
                     // defaultChecked={todo.isCompleted}
                     isChecked={todo.isCompleted}
-                    id={todo.id}
+                    id={todo.id.toString()}
                     key={todo.id}
                     onChange={() => {
                       updateTodo({ ...todo, isCompleted: !todo.isCompleted });
                     }}
-                    isDisabled={todo.id.includes("temp")}
+                    isDisabled={todo.id.toString().includes("temp")}
                     // size="lg"
                   />
                 </Center>
                 <Center>
-                  <Text as={todo.isCompleted ? "em" : ""}>
+                  <Text
+                    // @ts-ignore:
+                    as={todo.isCompleted ? "em" : ""}
+                  >
                     <Text
                       textAlign="left"
                       as={todo.isCompleted ? "del" : "samp"}
@@ -316,28 +325,31 @@ export default function TodoList() {
                 </Center>
                 <Spacer />
                 <IconButton
+                  aria-label="Edit todo"
                   icon={<FaEdit />}
                   borderRadius="3px"
                   onClick={() => navigate(`/todos/${todo.id}`)}
-                  isDisabled={todo.id.includes("temp")}
+                  isDisabled={todo.id.toString().includes("temp")}
                 />
                 <IconButton
+                  aria-label="Delete todo"
                   icon={<FaTrash />}
                   borderRadius="3px"
                   isLoading={isDeleting && deletingId == todo.id}
-                  onClick={() => deleteTodoSide({ id: todo.id })}
-                  isDisabled={todo.id.includes("temp")}
+                  onClick={() => deleteTodoSide(todo)}
+                  isDisabled={todo.id.toString().includes("temp")}
                 />
                 {/* </Center> */}
               </HStack>
             );
           })}
           <Pagination
-            className="pagination-bar"
+            // className="pagination-bar"
             currentPage={currentPage}
             totalCount={todoCount}
             pageSize={PageSize}
-            onPageChange={(page) => setCurrentPage(page)}
+            siblingCount={1}
+            onPageChange={(page: number) => setCurrentPage(page)}
           />
         </VStack>
       ) : (
@@ -346,11 +358,17 @@ export default function TodoList() {
         </Badge>
       );
   } else if (isError) {
+    // @ts-ignore:
     content = <p>{error}</p>;
   }
   return (
     <main>
-      <Heading mg="8" fontWeight="extrabold" size="2xl">
+      <Heading
+        // @ts-ignore:
+        mg="8"
+        fontWeight="extrabold"
+        size="2xl"
+      >
         Todos
       </Heading>
       <AddTodo />

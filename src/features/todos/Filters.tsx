@@ -1,5 +1,9 @@
 import { Select } from "@chakra-ui/react";
-const Filters = ({ setFilter, isLoading }) => {
+type Props = {
+  setFilter: Function;
+  isLoading: boolean;
+};
+const Filters = ({ setFilter, isLoading }: Props): JSX.Element => {
   const filters = ["All", "Active", "Completed"];
 
   if (isLoading == true) {
@@ -31,4 +35,4 @@ const Filters = ({ setFilter, isLoading }) => {
   );
 };
 
-export default Filters
+export default Filters;

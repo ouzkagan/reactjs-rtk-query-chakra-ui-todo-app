@@ -16,7 +16,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm, useWatch } from "react-hook-form";
+import { Control, useForm, useWatch } from "react-hook-form";
 import { FaUserAlt } from "react-icons/fa";
 import { FiFile } from "react-icons/fi";
 import * as yup from "yup";
@@ -27,6 +27,11 @@ import { useNavigate } from "react-router-dom";
 import FileUpload from "../../components/FileUpload";
 import { login, useIsAuthenticated, useUser } from "./userSlice";
 const CFaUserAlt = chakra(FaUserAlt);
+
+type FormValues = {
+  username: string;
+  file_: string;
+};
 
 export default function userLogin() {
   // redux
@@ -67,13 +72,22 @@ export default function userLogin() {
     watch,
     formState: { errors },
     control,
-  } = useForm({
+  } = useForm<FormValues>({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
   // const fileChange = watch("file_")
-  const fileChange = useWatch({ name: "file_", control });
+  // const fileChange = useWatch({ name: "file_", control });
 
+  function fileChange({ control }: { control: Control<FormValues> }) {
+    const file = useWatch({
+      control,
+      name: "file_", // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+      defaultValue: "default" // default value before the render
+    });
+  
+    return file
+  }
   const onSubmit = handleSubmit((data) => {
     // console.log("On Submit: ", { ...data, preview });
     dispatch(
@@ -86,7 +100,7 @@ export default function userLogin() {
     navigate("/todos");
   });
 
-  const getBase64 = (file) => {
+  const getBase64 = (file:Blob) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
@@ -101,18 +115,23 @@ export default function userLogin() {
       if (name != "file_") {
         return;
       }
-      if (!!value[0]) {
+      //@ts-ignore:
+      if (!!value && !!value[0]) {
         setPreview(undefined);
         return;
       }
-      if (file_.length == 0) {
+
+      //@ts-ignore:
+      if (file_?.length == 0) {
         setPreview(undefined);
         return;
       }
 
       // store base64 in local storage
+      //@ts-ignore:
       getBase64(file_[0]).then((base64) => {
         // console.log("file stored",base64);
+      //@ts-ignore:
         setPreview(base64);
       });
 
@@ -172,7 +191,7 @@ export default function userLogin() {
 
                 <FileUpload
                   accept={"image/*"}
-                  // multiple
+                  multiple={false}
                   register={register("file_")}
                 >
                   <Flex
@@ -212,7 +231,7 @@ export default function userLogin() {
                   <Input
                     type="text"
                     placeholder="JohnDoe"
-                    name="username"
+                    // name="username"
                     // ref={register}
                     {...register("username")}
                     defaultValue={user?.username}

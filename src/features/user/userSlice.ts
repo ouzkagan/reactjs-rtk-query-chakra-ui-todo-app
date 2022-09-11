@@ -1,11 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { useAppSelector } from "../../app/redux-hooks/index";
+import { useAppSelector } from "../../app/hooks/index";
+import { RootState } from "../../app/store";
 
-const initialState = {
-  loading: false,
+// Define a type for the slice state
+interface User {
+  username?: string,
+  image?:string,
+  
+}
+interface UserState {
+  user: User
+}
+
+const initialState:UserState = {
   user: {},
-  error: "",
 };
 
 const userSlice = createSlice({
@@ -21,8 +30,8 @@ const userSlice = createSlice({
   },
 });
 
-const selectUser = (state) => state.user;
-const selectIsAuthenticated = ({ user }) => !!user.user.username;
+const selectUser = (state:RootState) => state.user;
+const selectIsAuthenticated = (state:RootState) => !!state.user.user.username;
 // Hooks
 export const useUser = () => useAppSelector(selectUser);
 export const useIsAuthenticated = () => useAppSelector(selectIsAuthenticated);
