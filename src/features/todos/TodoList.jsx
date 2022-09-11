@@ -355,7 +355,7 @@ export default function TodoList() {
       </Heading>
       <AddTodo />
       {/* <Filters setFilter={setFilter} filter={filter} /> */}
-      {isUpdating ? "updating please wait..." : ""}
+      {/* {isUpdating ? "updating please wait..." : ""} */}
       {content}
       <div>
         <Routes>

@@ -101,7 +101,7 @@ const ToastMiddleware = (store) => (next) => (action) => {
     if(action.error.message == "Rejected"){
       store.dispatch(
         addNotification({
-          message: `Server is not responding. ${
+          message: `Server problem. ${
             action.payload && "Error: " + action?.payload?.data
           } `,
           type: "warning",

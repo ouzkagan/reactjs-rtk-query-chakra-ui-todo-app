@@ -95,7 +95,9 @@ export const apiSlice = createApi({
         method: "DELETE",
         body: id,
       }),
-      invalidatesTags: (result, error, arg) => [{ type: "Todo", id: arg.id }],
+      
+      invalidatesTags: ['Todo']
+      // invalidatesTags: (result, error, arg) => [{ type: "Todo", id: arg.id }],
     }),
   }),
 });

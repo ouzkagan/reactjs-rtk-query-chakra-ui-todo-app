@@ -136,6 +136,9 @@ export default function userLogin() {
       justifyContent="center"
       alignItems="center"
       color={textColor}
+      w="100%"
+      maxW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
+      minW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
     >
       <Stack
         flexDir="column"

@@ -43,37 +43,10 @@ export default function AddTodo() {
   }, [isLoading, isSuccess, isError]);
 
   return (
-    //   <form onSubmit={handleSubmit}>
-    //   <label htmlFor="new-todo">Enter a new todo item</label>
-    //   <div className="new-todo">
-    //     <input
-    //       type="text"
-    //       id="new-todo"
-    //       value={newTodo}
-    //       onChange={(e) => setNewTodo(e.target.value)}
-    //       placeholder="Enter new todo"
-    //     />
-    //   </div>
-
-    //   <button className="submit">submit todo {isAdding ? "(Adding your new todo...)" : ""}</button>
-    // </form>
-
     <form onSubmit={onSubmit}>
-      <HStack m="8">
-        {/* <Input 
-      variant='filled' 
-      id="new-todo"
-      value={newTodo}
-      onChange={(e) => setNewTodo(e.target.value)}
-      placeholder="Enter new todo"
-      borderColor='gray.200'
-      /> */}
+      <HStack m="8" alignItems="start">
         <FormControl isInvalid={!!errors.content} isRequired>
           <InputGroup>
-            {/* <InputLeftElement
-              pointerEvents="none"
-              children={<CFaUserAlt color="gray.300" />}
-            /> */}
             <Input
               type="text"
               placeholder="Buy milk.."
