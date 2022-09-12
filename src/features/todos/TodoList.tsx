@@ -377,7 +377,7 @@ export default function TodoList() {
       {content}
       <div>
         <Routes>
-          <Route path="/todos/:id" element={<TodoDetail />} />
+          <Route path="/todos/:id" element={<TodoDetail loading={isLoading} />} />
           <Route
             element={
               <div>
