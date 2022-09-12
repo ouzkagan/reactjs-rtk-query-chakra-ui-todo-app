@@ -6,7 +6,7 @@ import {
   Input,
   InputGroup
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAddTodoMutation } from "../api/apiSlice";
 
 import { useForm } from "react-hook-form";
@@ -14,10 +14,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+type FormValues = {
+  content: string;
+};
 const AddTodo = (): JSX.Element => {
-  type FormValues = {
-    content: string;
-  };
+  const controlReference = useRef(null);
 
   const [addTodo, { isLoading, isSuccess, isError }] = useAddTodoMutation();
 
@@ -36,7 +37,12 @@ const AddTodo = (): JSX.Element => {
   });
 
   const onSubmit = handleSubmit(({ content }) => {
+    // document.activeElement.blur();
+
     addTodo({ content: content, isCompleted: false });
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   });
   useEffect(() => {
     if (isSuccess) {
@@ -64,11 +70,16 @@ const AddTodo = (): JSX.Element => {
               : "there are no errors"}
           </FormErrorMessage>
         </FormControl>
-        <Button type="submit" colorScheme="orange" px="8">
+        <Button
+          type="submit"
+          colorScheme="orange"
+          px="8"
+          ref={controlReference}
+        >
           Add Todo
         </Button>
       </HStack>
     </form>
   );
 };
-export default AddTodo
+export default AddTodo;
