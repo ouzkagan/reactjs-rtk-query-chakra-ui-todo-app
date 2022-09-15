@@ -18,14 +18,16 @@ const ToastMiddleware: Middleware<
 > = (store) => (next) => (action) => {
   if (action.type == login.type) {
     // if user does't exist say registered?
-    store.dispatch(
-      addNotification({
-        message: `Logged in successfully. Welcome ${
-          store.getState().user?.user?.username
-        }!`,
-        type: "success",
-      })
-    );
+    setTimeout(() => {
+      store.dispatch(
+        addNotification({
+          message: `Logged in successfully. Welcome ${
+            store.getState().user?.user?.username
+          }!`,
+          type: "success",
+        })
+      );
+    }, 500);
   }
   if (action.type == logout.type) {
     // if user does't exist say registered?

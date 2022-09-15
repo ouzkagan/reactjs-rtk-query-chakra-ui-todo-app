@@ -1,9 +1,7 @@
 // https://github.com/christofferbergj/medium-notifications-demo
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-
 import { nanoid } from "nanoid";
-
 import { useAppSelector } from "../../app/hooks/index";
 import type { RootState } from "../../app/store";
 
@@ -25,13 +23,13 @@ export type NotificationPositions =
   | "bottom-right"
   | "bottom-left";
 
-type NotificationsState = {
+export type NotificationsState = {
   notifications: NotificationInterface[];
   position: NotificationPositions;
   autoHideDuration: number;
 };
 
-const initialState: NotificationsState = {
+export const initialState: NotificationsState = {
   notifications: [],
   position: "bottom-right",
   autoHideDuration: 6000,

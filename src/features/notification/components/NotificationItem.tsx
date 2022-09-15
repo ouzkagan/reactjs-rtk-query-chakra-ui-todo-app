@@ -1,5 +1,6 @@
 import { Box, Center, IconButton, Text } from "@chakra-ui/react";
 import { motion, useIsPresent } from "framer-motion";
+import React from "react";
 import { useTimeoutFn, useUpdateEffect } from "react-use";
 
 import { AiOutlineCloseCircle } from "react-icons/ai";
