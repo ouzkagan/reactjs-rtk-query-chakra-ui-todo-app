@@ -3,8 +3,8 @@ An app made with react and redux to manage your todo tasks bootstrapped with [vi
 
 Deployed at: [https://regal-croissant-a1fa52.netlify.app/](https://regal-croissant-a1fa52.netlify.app/)
 <p align="center">
-  
   <img alt="badge: deps 0" src="https://img.shields.io/badge/react-%2320232a.svg?style=flat-square&logo=react&logoColor=%2361DAFB" />
+  <img alt="badge: deps 0" src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white" />
   <img alt="badge: deps 0" src="https://img.shields.io/badge/React_Router-CA4245?style=flat-square&logo=react-router&logoColor=white" />
   <img alt="badge: deps 0" src="https://img.shields.io/badge/redux-%23593d88.svg?style=flat-square&logo=redux&logoColor=white" />
   <img alt="badge: deps 0" src="https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=flat-square&logo=reacthookform&logoColor=white" />
@@ -13,7 +13,7 @@ Deployed at: [https://regal-croissant-a1fa52.netlify.app/](https://regal-croissa
   <img alt="badge: deps 0" src="https://img.shields.io/badge/-jest-%23C21325?style=flat-square&logo=jest&logoColor=white" />
 </p>
 
-  # Used Technologies
+# Used Technologies
 - react, typescript
 - react router
 - redux-toolkit and redux-toolkit query
