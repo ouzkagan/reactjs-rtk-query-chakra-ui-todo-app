@@ -1,6 +1,8 @@
 # React To-do App with Mockapi.com
 An app made with react and redux to manage your todo tasks bootstrapped with [vite](https://vitejs.dev/).
 
+Deployed at: [https://regal-croissant-a1fa52.netlify.app/](https://regal-croissant-a1fa52.netlify.app/)
+
 # Used Technologies
 - react, typescript
 - react router
