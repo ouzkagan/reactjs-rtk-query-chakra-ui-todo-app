@@ -31,4 +31,4 @@ An app made with react and redux to manage your todo tasks bootstrapped with [vi
 
 # App screenshots
 
-![Working app gif](https://github.com/ouzkagan/reactjs-rtk-query-chakra-ui-todo-app/app-working.gif)
+![Working app gif](https://github.com/ouzkagan/reactjs-rtk-query-chakra-ui-todo-app/blob/master/app-working.gif)
