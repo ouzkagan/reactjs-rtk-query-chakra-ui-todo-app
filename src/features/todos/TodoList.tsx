@@ -19,7 +19,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
 import Pagination from "../../components/Pagination";
 import {
   useDeleteTodoMutation,
@@ -46,20 +45,18 @@ export default function TodoList() {
 
   // Alternative reselect create selector approach for filtering -- RTK Query filters
   const selectCompletedTodos = useMemo(() => {
-    const emptyArray: any = [];
     return createSelector(
-      (inputData: any) => inputData,
-      (data: RootState) =>
-        data?.data?.filter((todo: Todo) => todo.isCompleted === true) ?? []
+      (inputData: any) => inputData?.data,
+      (data: Todo[]) =>
+        data?.filter((todo: Todo) => todo.isCompleted === true) ?? []
     );
   }, []);
 
   const selectInCompletedTodos = useMemo(() => {
-    const emptyArray = [];
     return createSelector(
-      (inputData: any) => inputData,
-      (data: RootState) =>
-        data?.data?.filter((todo: Todo) => todo.isCompleted === false) ?? []
+      (inputData: any) => inputData?.data,
+      (data: Todo[]) =>
+        data?.filter((todo: Todo) => todo.isCompleted === false) ?? []
     );
   }, []);
 
@@ -362,7 +359,7 @@ export default function TodoList() {
     content = <p>{error}</p>;
   }
   return (
-    <main>
+    <main role="todolist-container">
       <Heading
         // @ts-ignore:
         mg="8"
@@ -377,7 +374,10 @@ export default function TodoList() {
       {content}
       <div>
         <Routes>
-          <Route path="/todos/:id" element={<TodoDetail loading={isLoading} />} />
+          <Route
+            path="/todos/:id"
+            element={<TodoDetail loading={isLoading} />}
+          />
           <Route
             element={
               <div>

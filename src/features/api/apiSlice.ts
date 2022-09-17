@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { Todo } from "../types";
-// const baseApiUrl = import.meta.env.VITE_REACT_APP_BASE_API
+const baseApiUrl = "https://631347b3b466aa9b03965cfe.mockapi.io/"
+
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_REACT_APP_BASE_API,
+    // baseUrl: import.meta.env.VITE_REACT_APP_BASE_API,
+    baseUrl: baseApiUrl,
   }),
   tagTypes: ["Todo"],
 

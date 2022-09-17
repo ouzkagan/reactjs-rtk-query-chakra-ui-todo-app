@@ -1,8 +1,3 @@
-// import { useState, useEffect } from "react";
-// import reactLogo from "./assets/react.svg";
-// import { useSelector, useDispatch } from "react-redux";
-// import { fetchUsers } from "./features/user/userSlice";
-// import { ordered, restocked } from "./features/cake/cakeSlice";
 import { VStack } from "@chakra-ui/react";
 import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
@@ -10,10 +5,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { Notifications } from "./features/notification/components/Notifications";
 import TodoList from "./features/todos/TodoList";
 import UserLogin from "./features/user/UserLogin";
-function App() {
+const App = (): JSX.Element => {
   return (
     <VStack
       p={4}
+      role="app"
     >
       <Header />
       <Routes>

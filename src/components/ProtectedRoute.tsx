@@ -20,6 +20,7 @@ const ProtectedRoute = () => {
         maxW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
         minW={{ base: "90vw", sm: "80vw", lg: "50vw", xl: "40vw" }}
         alignItems="stretch"
+        role="protected"
       >
         <Box textAlign="center" p="10">
           You must be logged in to see this content{" "}

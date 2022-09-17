@@ -189,3 +189,9 @@ describe("notification reducer", () => {
     });
   });
 });
+
+describe("notification hooks", () => {
+  it.todo("useNotifications");
+  it.todo("useNotificationPosition");
+  it.todo("useNotificationDuration");
+});

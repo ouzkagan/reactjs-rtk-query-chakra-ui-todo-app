@@ -26,7 +26,6 @@ const Filters = ({ setFilter, isLoading }: Props): JSX.Element => {
       {filters.map((item, index) => {
         return (
           <option value={index} key={item}>
-            {" "}
             {item}
           </option>
         );
