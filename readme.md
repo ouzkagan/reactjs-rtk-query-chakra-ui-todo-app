@@ -1,49 +1,36 @@
-# React To-do App with mockapi.com
-An app made with react and redux to manage your todo tasks bootstrapped with [vite](https://vitejs.dev/).
+<h3 align="left"> Hi there 👋</h3>
 
-Deployed at: [https://regal-croissant-a1fa52.netlify.app/](https://regal-croissant-a1fa52.netlify.app/)
-<p align="center">
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/react-%2320232a.svg?style=flat-square&logo=react&logoColor=%2361DAFB" />
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white" />
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/React_Router-CA4245?style=flat-square&logo=react-router&logoColor=white" />
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/redux-%23593d88.svg?style=flat-square&logo=redux&logoColor=white" />
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=flat-square&logo=reacthookform&logoColor=white" />
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/chakra-%234ED1C5.svg?style=flat-square&logo=chakraui&logoColor=white" />
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/Framer-black?style=flat-square&logo=framer&logoColor=blue" />
-  <img alt="badge: deps 0" src="https://img.shields.io/badge/-jest-%23C21325?style=flat-square&logo=jest&logoColor=white" />
+- 🔭 I'm currently working with ReactJS/Nextjs
+- 📫 How to reach me: [linkedin](https://www.linkedin.com/in/ogzkgnlmz)
+
+<h3 align="left">Languages and Tools:</h3>
+<p align="left">
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40" />
+
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="react" width="40" height="40" />
+
+  <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/redux/redux-original.svg" alt="nextjs" width="40" height="40" />
+
+  <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/nextjs/nextjs-original-wordmark.svg" alt="nextjs" width="40" height="40" />
+  <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/nodejs/nodejs-original.svg" alt="node" width="40" height="40" />
+
+  <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/tailwindcss/tailwindcss-original-wordmark.svg" alt="tailwindcss" width="40" height="40" />
+
+  <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/mongodb/mongodb-original.svg" alt="mongodb" width="40" height="40" />
+
 </p>
 
-# Used Technologies
-- react, typescript
-- react router
-- redux-toolkit and redux-toolkit query
-- redux-persist
-- Chakra-ui, react-icons
-- framer-motion
-- react-hook-form, Yup validation
-- jest
+<!--
+**ouzkagan/ouzkagan** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
+Here are some ideas to get you started:
 
-
-
-# Background Features
-- Protected routes with **react-router**
-- Optimistic-pessimistic updates, no unnecessary network requests and fetching todos with with **rtk-query**
-- Persisting user **image(base64) and username** information in localStorage with **redux-toolkit** and **redux-persist** + _logout_ 
-- Custom **Toast Middleware** for redux to manage notification toasts from 1 place
-- Dark mode and skeleton loader with **Chakra-ui**
-- pagination with custom usePagination Hook
-- **Framer-motion** for UI animations and toast notifications
-- **React Hook Form** for forms, **YUP** for validations
-
-# Functionalities
-- User need login with nickname and image to use the app. image stored as base64.
-- All API calls made with RTK-Query. 
-- User can add, edit, delete todos.
-- Toast notifications for user on request success and fail 
-- User can switch between light and dark mode.
-- User inputs protected with Yup validation 
-
-# App screenshots
-
-![Working app gif](https://github.com/ouzkagan/reactjs-rtk-query-chakra-ui-todo-app/blob/master/app-working.gif)
+- 🔭 I’m currently working on ...
+- 🌱 I’m currently learning ...
+- 👯 I’m looking to collaborate on ...
+- 🤔 I’m looking for help with ...
+- 💬 Ask me about ...
+- 📫 How to reach me: ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+-->
