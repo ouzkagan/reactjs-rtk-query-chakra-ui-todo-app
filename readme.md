@@ -21,7 +21,7 @@ Deployed at: [https://regal-croissant-a1fa52.netlify.app/](https://regal-croissa
 - Chakra-ui, react-icons
 - framer-motion
 - react-hook-form, Yup validation
-- jest
+- jest 
 
 
 
